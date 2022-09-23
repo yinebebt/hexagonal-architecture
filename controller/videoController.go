@@ -3,6 +3,8 @@
 package controller
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"gitlab.com/Yinebeb-01/simpleAPI/entity"
@@ -11,8 +13,12 @@ import (
 )
 
 type VideoController interface {
+	//apiroute
 	FindAll() []entity.Video
 	Save(*gin.Context) error
+
+	//show route
+	ShowAll(*gin.Context)
 }
 
 type controller struct {
@@ -51,4 +57,15 @@ func (c *controller) Save(ctx *gin.Context) error {
 	}
 	c.service.Save(video)
 	return nil
+}
+
+// ShowAll shows the list of videos via some rendered html/css-format
+func (c controller) ShowAll(ctx *gin.Context) {
+	videos := c.service.FindAll()
+	data := gin.H{
+		"title":  "Video Page",
+		"videos": videos,
+		"msg":    "BY Pragmatic review-yina",
+	}
+	ctx.HTML(http.StatusOK, "index.html", data)
 }
