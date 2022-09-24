@@ -8,7 +8,7 @@ build:
   image: golang:latest
   script:
     - go get -d -v
-    - go build -o bin/simple-api -v .
+    - go build -o bin/simpleAPI -v .
 
 test:
   stage: test
@@ -22,9 +22,9 @@ staging:
     - apt-get update -qy
     - apt-get install -y ruby-dev
     - gem install dpl
-    - dpl --provider=heroku --app=simple-api --api-key=$HEROKU_API_KEY
+    - dpl --provider=heroku --app=simple-api-yina --api-key=$HEROKU_API_KEY
   environment:
     name: Staging
-    url: https://simple-api.herokuapp.com/
+    url: https://simple-api-yina.herokuapp.com/
   only:
     - ci-cd
