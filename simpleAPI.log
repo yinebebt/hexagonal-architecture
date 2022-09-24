@@ -5,16 +5,17 @@
 [GIN-debug] GET    /css/*filepath            --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (4 handlers)
 [GIN-debug] HEAD   /css/*filepath            --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (4 handlers)
 [GIN-debug] Loaded HTML Templates (4): 
-	- 
-	- footer.html
 	- header.html
 	- index.html
+	- 
+	- footer.html
 
-[GIN-debug] GET    /api/test                 --> main.main.func1 (5 handlers)
-[GIN-debug] GET    /api/videos               --> main.main.func2 (5 handlers)
-[GIN-debug] POST   /api/videos               --> main.main.func3 (5 handlers)
+[GIN-debug] POST   /login                    --> main.main.func1 (4 handlers)
+[GIN-debug] GET    /api/test                 --> main.main.func2 (5 handlers)
+[GIN-debug] GET    /api/videos               --> main.main.func3 (5 handlers)
+[GIN-debug] POST   /api/videos               --> main.main.func4 (5 handlers)
 [GIN-debug] GET    /view/videos              --> gitlab.com/Yinebeb-01/simpleAPI/controller.VideoController.ShowAll-fm (4 handlers)
 [GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
 Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies for details.
-[GIN-debug] Listening and serving HTTP on :5000
-::1 [2022-09-24 11:14:57.525605709 +0300 EAT m=+61.544525173] |POST| 400 1.58509ms `/api/videos`::1 [2022-09-24 11:15:02.109793839 +0300 EAT m=+66.128713298] |GET| 200 1.943056ms `/view/videos`
+[GIN-debug] Listening and serving HTTP on :8080
+::1 [2022-09-24 16:21:01.84994188 +0300 EAT m=+133.377299781] |POST| 401 821.141µs `/login`::1 [2022-09-24 16:22:57.267260887 +0300 EAT m=+248.794618803] |POST| 401 1.128897ms `/login`::1 [2022-09-24 16:23:49.657922644 +0300 EAT m=+301.185280514] |POST| 200 913.424µs `/login`::1 [2022-09-24 16:35:40.64995866 +0300 EAT m=+1012.177316556] |GET| 401 503.114µs `/api/videos`::1 [2022-09-24 16:36:14.414184775 +0300 EAT m=+1045.941542714] |GET| 401 4.531906ms `/api/videos`::1 [2022-09-24 16:41:00.931967356 +0300 EAT m=+1332.459325268] |GET| 200 1.384636ms `/api/videos`::1 [2022-09-24 16:43:59.940024387 +0300 EAT m=+1511.467382299] |POST| 400 1.135655ms `/api/videos`::1 [2022-09-24 16:44:09.585948466 +0300 EAT m=+1521.113306355] |POST| 400 17.418585ms `/api/videos`::1 [2022-09-24 16:49:03.871929417 +0300 EAT m=+1815.399287288] |POST| 401 816.992µs `/api/videos`

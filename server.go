@@ -17,6 +17,10 @@ import (
 var (
 	videoservice    services.VideoService      = services.New()
 	videocontroller controller.VideoController = controller.New(videoservice)
+
+	lognservice     services.LoginService      = services.NewLoginService()
+	jwtservice      services.JWTService        = services.NewJWTService()
+	logincontroller controller.LoginController = controller.NewLoginController(lognservice, jwtservice)
 )
 
 func main() {
@@ -30,8 +34,21 @@ func main() {
 	router.Static("/css", "./templates/css")
 	router.LoadHTMLGlob("./templates/*.html")
 
+	// Login Endpoint: Authentication + Token creation
+	router.POST("/login", func(ctx *gin.Context) {
+		token := logincontroller.Login(ctx)
+		if token != "" {
+			ctx.JSON(http.StatusOK, gin.H{
+				"token": token,
+			})
+		} else {
+			ctx.JSON(http.StatusUnauthorized, nil)
+		}
+	})
+
+	// JWT Authorization Middleware applies to "/api" only. You can see/check the Basc Auth too
 	//apiRoute group is used to see/access api via endpoints.
-	apiRoute := router.Group("/api", middlewares.BasicAuth())
+	apiRoute := router.Group("/api", middlewares.AuthorizeJWT()) //middlewares.BasicAuth()
 	{
 		apiRoute.GET("/test", func(ctx *gin.Context) {
 			ctx.JSON(http.StatusOK, gin.H{
