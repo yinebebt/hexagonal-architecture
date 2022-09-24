@@ -67,9 +67,9 @@ Depending on what you are making, it can be a good idea to include screenshots o
 To install simpleAPI package, you need to install Go and set your Go workspace first.
 
 1. You first need Go installed (version 1.15+ is required), then you can use the below Go command to install Gin.
-    go get -u gitlab.com/Yinebeb-01/simpleapi
-2. Import it in your code:
-    import "gitlab.com/Yinebeb-01/simpleapi"
+- - go get -u gitlab.com/Yinebeb-01/simpleapi
+2. (**Import) it in your code:
+- - import "gitlab.com/Yinebeb-01/simpleapi"
 ## Usage
 Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
 
@@ -88,7 +88,7 @@ For people who want to make changes to your project, it's helpful to have some d
 You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
 
 ## Authors and acknowledgment
-- - [Yinebeb](https://https://gitlab.com/Yinebeb-01)
+ [Yinebeb](https://https://gitlab.com/Yinebeb-01)
 
 ## License
 For open source projects, say how it is licensed.

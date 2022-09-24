@@ -2,19 +2,19 @@
  - using env:	export GIN_MODE=release
  - using code:	gin.SetMode(gin.ReleaseMode)
 
-[GIN-debug] GET    /css/*filepath            --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (5 handlers)
-[GIN-debug] HEAD   /css/*filepath            --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (5 handlers)
+[GIN-debug] GET    /css/*filepath            --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (4 handlers)
+[GIN-debug] HEAD   /css/*filepath            --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (4 handlers)
 [GIN-debug] Loaded HTML Templates (4): 
-	- header.html
-	- index.html
 	- 
 	- footer.html
+	- header.html
+	- index.html
 
 [GIN-debug] GET    /api/test                 --> main.main.func1 (5 handlers)
 [GIN-debug] GET    /api/videos               --> main.main.func2 (5 handlers)
 [GIN-debug] POST   /api/videos               --> main.main.func3 (5 handlers)
-[GIN-debug] GET    /view/videos              --> gitlab.com/Yinebeb-01/simpleAPI/controller.VideoController.ShowAll-fm (5 handlers)
+[GIN-debug] GET    /view/videos              --> gitlab.com/Yinebeb-01/simpleAPI/controller.VideoController.ShowAll-fm (4 handlers)
 [GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
 Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies for details.
-[GIN-debug] Listening and serving HTTP on :8080
-::1 [2022-09-23 17:45:40.839711093 +0300 EAT m=+6.548944465] |POST| 400 774.661µs `/api/videos`::1 [2022-09-23 17:45:42.197415581 +0300 EAT m=+7.906648953] |POST| 400 345.642µs `/api/videos`::1 [2022-09-23 17:45:47.219421161 +0300 EAT m=+12.928654573] |GET| 200 1.447531ms `/view/videos`::1 [2022-09-23 17:45:54.606580125 +0300 EAT m=+20.315813642] |GET| 200 4.975688ms `/view/videos`::1 [2022-09-23 17:47:27.063696617 +0300 EAT m=+112.772929990] |GET| 200 607.519µs `/view/videos`::1 [2022-09-23 17:51:42.961689675 +0300 EAT m=+368.670923048] |POST| 400 304.215µs `/api/videos`::1 [2022-09-23 17:51:45.538479894 +0300 EAT m=+371.247713271] |POST| 400 1.746324ms `/api/videos`::1 [2022-09-23 17:51:56.205662642 +0300 EAT m=+381.914896109] |GET| 200 5.896699ms `/view/videos`
+[GIN-debug] Listening and serving HTTP on :5000
+::1 [2022-09-24 11:14:57.525605709 +0300 EAT m=+61.544525173] |POST| 400 1.58509ms `/api/videos`::1 [2022-09-24 11:15:02.109793839 +0300 EAT m=+66.128713298] |GET| 200 1.943056ms `/view/videos`

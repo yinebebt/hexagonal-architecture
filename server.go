@@ -24,14 +24,14 @@ func main() {
 
 	router := gin.New()
 	//custome middlewares used, dump is an alise of gin-dum which used for debugging tool.
-	router.Use(gin.Recovery(), middlewares.Logger(), middlewares.BasicAuth(), dump.Dump())
+	router.Use(gin.Recovery(), middlewares.Logger(), dump.Dump())
 
 	//let we load static files
 	router.Static("/css", "./templates/css")
 	router.LoadHTMLGlob("./templates/*.html")
 
 	//apiRoute group is used to see/access api via endpoints.
-	apiRoute := router.Group("/api")
+	apiRoute := router.Group("/api", middlewares.BasicAuth())
 	{
 		apiRoute.GET("/test", func(ctx *gin.Context) {
 			ctx.JSON(http.StatusOK, gin.H{
@@ -53,13 +53,18 @@ func main() {
 		})
 	}
 
-	//viewRoute Group will use to render static files- I think so
+	//viewRoute Group will use to render static files-no need of authentication
 	viewRoute := router.Group("/view")
 	{
 		viewRoute.GET("/videos", videocontroller.ShowAll)
-
 	}
-	router.Run(":8080")
+
+	//we can get port # from env variable
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	router.Run(":" + port)
 }
 
 // configOutput create a custom logger file to see debugging outputs.
