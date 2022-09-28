@@ -9,21 +9,24 @@ import (
 	"github.com/gin-gonic/gin"
 	"gitlab.com/Yinebeb-01/simpleAPI/controller"
 	"gitlab.com/Yinebeb-01/simpleAPI/middlewares"
+	"gitlab.com/Yinebeb-01/simpleAPI/repository"
 	"gitlab.com/Yinebeb-01/simpleAPI/services"
 
 	dump "github.com/tpkeeper/gin-dump"
 )
 
 var (
-	videoservice    services.VideoService      = services.New()
-	videocontroller controller.VideoController = controller.New(videoservice)
+	videorepository repository.VideoReposiory = repository.NewVideoRepository()
+	lognservice     services.LoginService     = services.NewLoginService()
+	jwtservice      services.JWTService       = services.NewJWTService()
 
-	lognservice     services.LoginService      = services.NewLoginService()
-	jwtservice      services.JWTService        = services.NewJWTService()
+	videoservice    services.VideoService      = services.New(videorepository)
+	videocontroller controller.VideoController = controller.New(videoservice)
 	logincontroller controller.LoginController = controller.NewLoginController(lognservice, jwtservice)
 )
 
 func main() {
+	defer videorepository.Close()
 	configOutput()
 
 	router := gin.New()
@@ -66,6 +69,24 @@ func main() {
 				ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			} else {
 				ctx.JSON(http.StatusBadRequest, gin.H{"message": "Video input is valid!"})
+			}
+		})
+
+		apiRoute.PUT("/videos/:id", func(ctx *gin.Context) {
+			err := videocontroller.Update(ctx)
+			if err != nil {
+				ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			} else {
+				ctx.JSON(http.StatusBadRequest, gin.H{"message": "Video input is valid!"})
+			}
+		})
+
+		apiRoute.DELETE("/videos/:id", func(ctx *gin.Context) {
+			err := videocontroller.Delete(ctx)
+			if err != nil {
+				ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			} else {
+				ctx.JSON(http.StatusBadRequest, gin.H{"message": "Video Deleted!"})
 			}
 		})
 	}

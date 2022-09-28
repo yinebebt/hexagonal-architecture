@@ -11,8 +11,8 @@ type loginService struct {
 
 func NewLoginService() LoginService {
 	return &loginService{
-		authorizedUsername: "Yinebeb",
-		authorizedPassword: "sileant",
+		authorizedUsername: "yinebeb",
+		authorizedPassword: "silenat",
 	}
 } //consider this a DB where pair of PW and username stored, the credential struct is an instance/trial for this key/value pair.
 

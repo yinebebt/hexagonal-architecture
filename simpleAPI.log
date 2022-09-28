@@ -5,17 +5,20 @@
 [GIN-debug] GET    /css/*filepath            --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (4 handlers)
 [GIN-debug] HEAD   /css/*filepath            --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (4 handlers)
 [GIN-debug] Loaded HTML Templates (4): 
-	- header.html
-	- index.html
 	- 
 	- footer.html
+	- header.html
+	- index.html
 
 [GIN-debug] POST   /login                    --> main.main.func1 (4 handlers)
 [GIN-debug] GET    /api/test                 --> main.main.func2 (5 handlers)
 [GIN-debug] GET    /api/videos               --> main.main.func3 (5 handlers)
 [GIN-debug] POST   /api/videos               --> main.main.func4 (5 handlers)
+[GIN-debug] PUT    /api/videos/:id           --> main.main.func5 (5 handlers)
+[GIN-debug] DELETE /api/videos/:id           --> main.main.func6 (5 handlers)
 [GIN-debug] GET    /view/videos              --> gitlab.com/Yinebeb-01/simpleAPI/controller.VideoController.ShowAll-fm (4 handlers)
 [GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
 Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies for details.
 [GIN-debug] Listening and serving HTTP on :8080
-::1 [2022-09-24 16:21:01.84994188 +0300 EAT m=+133.377299781] |POST| 401 821.141µs `/login`::1 [2022-09-24 16:22:57.267260887 +0300 EAT m=+248.794618803] |POST| 401 1.128897ms `/login`::1 [2022-09-24 16:23:49.657922644 +0300 EAT m=+301.185280514] |POST| 200 913.424µs `/login`::1 [2022-09-24 16:35:40.64995866 +0300 EAT m=+1012.177316556] |GET| 401 503.114µs `/api/videos`::1 [2022-09-24 16:36:14.414184775 +0300 EAT m=+1045.941542714] |GET| 401 4.531906ms `/api/videos`::1 [2022-09-24 16:41:00.931967356 +0300 EAT m=+1332.459325268] |GET| 200 1.384636ms `/api/videos`::1 [2022-09-24 16:43:59.940024387 +0300 EAT m=+1511.467382299] |POST| 400 1.135655ms `/api/videos`::1 [2022-09-24 16:44:09.585948466 +0300 EAT m=+1521.113306355] |POST| 400 17.418585ms `/api/videos`::1 [2022-09-24 16:49:03.871929417 +0300 EAT m=+1815.399287288] |POST| 401 816.992µs `/api/videos`
+[GIN-debug] redirecting request 307: /api/videos --> /api/videos
+::1 [2022-09-26 12:54:42.018679238 +0300 EAT m=+15.556076639] |POST| 400 7.106342ms `/api/videos`::1 [2022-09-26 12:54:49.640291003 +0300 EAT m=+23.177688465] |GET| 200 4.096274ms `/api/videos`::1 [2022-09-26 12:55:41.594357612 +0300 EAT m=+75.131755044] |PUT| 400 116.497669ms `/api/videos/2`::1 [2022-09-26 12:56:02.37318088 +0300 EAT m=+95.910578333] |GET| 200 5.542604ms `/api/videos`::1 [2022-09-26 12:56:23.043569284 +0300 EAT m=+116.580966722] |DELETE| 400 85.192422ms `/api/videos/4`::1 [2022-09-26 12:56:28.359552689 +0300 EAT m=+121.896950133] |GET| 200 3.011771ms `/api/videos`::1 [2022-09-26 12:56:49.338147101 +0300 EAT m=+142.875544537] |PUT| 400 19.402383ms `/api/videos/3`::1 [2022-09-26 12:56:54.013305892 +0300 EAT m=+147.550703347] |GET| 200 1.626586ms `/api/videos`::1 [2022-09-26 12:57:50.259390998 +0300 EAT m=+203.796788456] |PUT| 400 138.769996ms `/api/videos/2`::1 [2022-09-26 12:57:58.640585081 +0300 EAT m=+212.177982506] |GET| 200 6.476623ms `/api/videos`::1 [2022-09-26 12:58:21.46534023 +0300 EAT m=+235.002737675] |PUT| 400 105.157795ms `/api/videos/3`::1 [2022-09-26 12:58:25.80993414 +0300 EAT m=+239.347331563] |GET| 200 2.021426ms `/api/videos`
