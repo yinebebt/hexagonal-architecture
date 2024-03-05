@@ -1,1 +1,2 @@
-*.db
+test.db
+services/test.db
