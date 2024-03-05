@@ -7,10 +7,10 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"gitlab.com/Yinebeb-01/simpleAPI/controller"
-	"gitlab.com/Yinebeb-01/simpleAPI/middlewares"
-	"gitlab.com/Yinebeb-01/simpleAPI/repository"
-	"gitlab.com/Yinebeb-01/simpleAPI/services"
+	"gitlab.com/Yinebeb-01/simpleapi/controller"
+	"gitlab.com/Yinebeb-01/simpleapi/middlewares"
+	"gitlab.com/Yinebeb-01/simpleapi/repository"
+	"gitlab.com/Yinebeb-01/simpleapi/services"
 
 	dump "github.com/tpkeeper/gin-dump"
 )
@@ -26,7 +26,6 @@ var (
 )
 
 func main() {
-	defer videorepository.Close()
 	configOutput()
 
 	router := gin.New()
@@ -107,7 +106,7 @@ func main() {
 
 // configOutput create a custom logger file to see debugging outputs.
 func configOutput() {
-	writer, err := os.Create("simpleAPI.log")
+	writer, err := os.Create("simpleapi.log")
 	if err != nil {
 		fmt.Printf("unable to create log file")
 	}

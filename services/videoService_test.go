@@ -7,19 +7,25 @@ import (
 
 	"github.com/cucumber/godog"
 	"github.com/stretchr/testify/assert"
-	"gitlab.com/Yinebeb-01/simpleAPI/entity"
-	"gitlab.com/Yinebeb-01/simpleAPI/repository"
+	"gitlab.com/Yinebeb-01/simpleapi/entity"
+	"gitlab.com/Yinebeb-01/simpleapi/repository"
+)
+
+const (
+	TITLE       = "Video Title"
+	DESCRIPTION = "Video Description"
+	URL         = "https://youtu.be/JgW-i2QjgHQ"
 )
 
 var (
-	videorepository repository.VideoReposiory = repository.NewVideoRepository()
-	videoservice    VideoService              = New(videorepository)
-	video           entity.Video              = entity.Video{}
+	videoRepository = repository.NewVideoRepository()
+	videoService    = New(videoRepository)
+	video           = entity.Video{}
 	t               *testing.T
 )
 
 func adminPostNoVideo() error {
-	video = entity.Video{} // null video
+	video = entity.Video{}
 	return nil
 }
 
@@ -32,24 +38,19 @@ func adminPostSomeVideo() {
 			FirstName: "yina",
 			LastName:  "tarku",
 			Age:       45,
-			Email:     "yinta5@gmail.co",
+			Email:     "yintar@gmail.com",
 		},
 	}
-	videoservice.Save(video)
+	videoService.Save(video)
 }
 
 func adminRunFindAllMethod() error {
 	return nil
 }
 
-func videoShouldBeVideo() error { //arg1 *godog.Table
-	Video := entity.Video{}
-
-	Video = videoservice.FindAll()[0]
-
-	ist := assert.Equal(t, Video.Title, video.Title)
-	isd := assert.Equal(t, Video.Description, video.Description)
-	if ist && isd {
+func videoShouldBeVideo() error {
+	videoRes := videoService.FindAll()[0]
+	if videoRes.Title == video.Title && videoRes.Description == video.Description {
 		return nil
 	} else {
 		return errors.New("not video")
@@ -57,9 +58,8 @@ func videoShouldBeVideo() error { //arg1 *godog.Table
 }
 
 func videoShouldBeNull() error {
-	video = videoservice.FindAll()[0]
-	is := assert.Empty(t, video, "shoube empty")
-	if is {
+	videos := videoService.FindAll()
+	if assert.Empty(t, videos, "should be empty") {
 		return nil
 	} else {
 		return errors.New("not null")
@@ -68,8 +68,8 @@ func videoShouldBeNull() error {
 
 func InitializeScenario(ctx *godog.ScenarioContext) {
 	ctx.Before(func(ctx context.Context, sc *godog.Scenario) (context.Context, error) {
-		videorepository = repository.NewVideoRepository()
-		videoservice = New(videorepository)
+		videoRepository = repository.NewVideoRepository()
+		videoService = New(videoRepository)
 		video = entity.Video{}
 
 		return ctx, nil
@@ -82,7 +82,47 @@ func InitializeScenario(ctx *godog.ScenarioContext) {
 	ctx.Step(`^video should be null$`, videoShouldBeNull)
 
 	ctx.After(func(ctx context.Context, sc *godog.Scenario, err error) (context.Context, error) {
-		videorepository.Close()
+		videoRepository.Delete(video)
 		return ctx, nil
 	})
+}
+
+func TestFeatures(t *testing.T) {
+	suite := godog.TestSuite{
+		ScenarioInitializer: InitializeScenario,
+		Options: &godog.Options{
+			Format:   "pretty",
+			Paths:    []string{"features"},
+			TestingT: t, // Testing instance that will run subtests.
+		},
+	}
+
+	if suite.Run() != 0 {
+		t.Fatal("non-zero status returned, failed to run feature tests")
+	}
+}
+
+func TestFindAll(t *testing.T) {
+	video := repository.NewVideoRepository()
+	service := New(video)
+
+	service.Save(getVideo())
+
+	videos := service.FindAll()
+
+	firstVideo := videos[0]
+	assert.NotNil(t, videos)
+	assert.Equal(t, TITLE, firstVideo.Title)
+	assert.Equal(t, DESCRIPTION, firstVideo.Description)
+	assert.Equal(t, URL, firstVideo.URL)
+
+	video.Delete(firstVideo)
+}
+
+func getVideo() entity.Video {
+	return entity.Video{
+		Title:       TITLE,
+		Description: DESCRIPTION,
+		URL:         URL,
+	}
 }

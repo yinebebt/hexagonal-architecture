@@ -2,8 +2,8 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"gitlab.com/Yinebeb-01/simpleAPI/dto"
-	"gitlab.com/Yinebeb-01/simpleAPI/services"
+	"gitlab.com/Yinebeb-01/simpleapi/dto"
+	"gitlab.com/Yinebeb-01/simpleapi/services"
 )
 
 type LoginController interface {

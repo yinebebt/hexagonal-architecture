@@ -8,7 +8,7 @@ build:
   image: golang:latest
   script:
     - go get -d -v
-    - go build -o bin/simpleAPI -v .
+    - go build -o bin/simpleapi -v .
 
 test:
   stage: test

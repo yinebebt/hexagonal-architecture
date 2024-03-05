@@ -2,7 +2,7 @@
 FROM golang:latest
 
 # Add Maintainer Info
-LABEL maintainer="Quique <hello@pragmaticreviews.com>"
+LABEL maintainer="Yinebeb <yintar5@gmail.com>"
 
 # Set the Current Working Directory inside the container
 WORKDIR /app
@@ -32,4 +32,4 @@ RUN find . -name "*.go" -type f -delete
 EXPOSE $PORT
 
 # Run the app
-CMD ["./simpleAPI"]
+CMD ["./simpleapi"]

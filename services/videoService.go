@@ -1,8 +1,8 @@
 package services
 
 import (
-	"gitlab.com/Yinebeb-01/simpleAPI/entity"
-	"gitlab.com/Yinebeb-01/simpleAPI/repository"
+	"gitlab.com/Yinebeb-01/simpleapi/entity"
+	"gitlab.com/Yinebeb-01/simpleapi/repository"
 )
 
 type VideoService interface {
@@ -16,9 +16,9 @@ type videoSer struct {
 	videos repository.VideoReposiory
 }
 
-// New is a constructor to iniialize a viddeosService.
-func New(vidrepo repository.VideoReposiory) VideoService {
-	return &videoSer{videos: vidrepo}
+// New is a constructor to initialize a videoService.
+func New(vidRepo repository.VideoReposiory) VideoService {
+	return &videoSer{videos: vidRepo}
 }
 
 // Save will add append video to Videos, and return the newly added video.
@@ -35,8 +35,6 @@ func (repoService *videoSer) Delete(video entity.Video) {
 	repoService.videos.Delete(video)
 }
 
-// find will return slice of all videos saved.
 func (repoService *videoSer) FindAll() []entity.Video {
-	videos := repoService.videos.FindAll()
-	return videos
+	return repoService.videos.FindAll()
 }

@@ -1,10 +1,12 @@
-module gitlab.com/Yinebeb-01/simpleAPI
+module gitlab.com/Yinebeb-01/simpleapi
 
 go 1.19
 
 require (
 	github.com/cucumber/godog v0.12.5
 	github.com/gin-gonic/gin v1.8.1
+	gorm.io/driver/sqlite v1.5.5
+	gorm.io/gorm v1.25.7
 )
 
 require (
@@ -16,7 +18,8 @@ require (
 	github.com/hashicorp/go-memdb v1.3.0 // indirect
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
-	github.com/mattn/go-sqlite3 v1.14.0 // indirect
+	github.com/jinzhu/now v1.1.5 // indirect
+	github.com/mattn/go-sqlite3 v1.14.22 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
@@ -29,7 +32,6 @@ require (
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-playground/validator/v10 v10.10.0
 	github.com/goccy/go-json v0.9.7 // indirect
-	github.com/jinzhu/gorm v1.9.16
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect

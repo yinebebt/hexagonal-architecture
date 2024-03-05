@@ -14,8 +14,9 @@ func NewLoginService() LoginService {
 		authorizedUsername: "yinebeb",
 		authorizedPassword: "silenat",
 	}
-} //consider this a DB where pair of PW and username stored, the credential struct is an instance/trial for this key/value pair.
+}
 
+// consider this a DB where pair of PW and username stored.
 func (service *loginService) Login(username string, password string) bool {
 	return service.authorizedUsername == username &&
 		service.authorizedPassword == password

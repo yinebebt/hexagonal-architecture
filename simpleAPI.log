@@ -16,7 +16,7 @@
 [GIN-debug] POST   /api/videos               --> main.main.func4 (5 handlers)
 [GIN-debug] PUT    /api/videos/:id           --> main.main.func5 (5 handlers)
 [GIN-debug] DELETE /api/videos/:id           --> main.main.func6 (5 handlers)
-[GIN-debug] GET    /view/videos              --> gitlab.com/Yinebeb-01/simpleAPI/controller.VideoController.ShowAll-fm (4 handlers)
+[GIN-debug] GET    /view/videos              --> gitlab.com/Yinebeb-01/simpleapi/controller.VideoController.ShowAll-fm (4 handlers)
 [GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
 Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies for details.
 [GIN-debug] Listening and serving HTTP on :8080

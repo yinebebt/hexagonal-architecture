@@ -1,9 +1,10 @@
 package repository
 
 import (
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
-	"gitlab.com/Yinebeb-01/simpleAPI/entity"
+	"fmt"
+	"gitlab.com/Yinebeb-01/simpleapi/entity"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
 type VideoReposiory interface {
@@ -11,7 +12,6 @@ type VideoReposiory interface {
 	Update(entity.Video)
 	Delete(entity.Video)
 	FindAll() []entity.Video
-	Close()
 }
 
 type Database struct {
@@ -19,18 +19,21 @@ type Database struct {
 }
 
 func NewVideoRepository() VideoReposiory {
-	db, err := gorm.Open("sqlite3", "test.db") //creating new DB, with sqlite3-type
+	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
 	if err != nil {
 		panic("Failed to create a DB.")
 	}
-	db.AutoMigrate(&entity.Video{}, &entity.Person{})
+	_ = db.AutoMigrate(&entity.Video{}, &entity.Person{})
+	if err != nil {
+		return &Database{}
+	}
 	return &Database{
 		connection: db,
 	}
 }
 
 func (db *Database) Save(video entity.Video) {
-	db.connection.Create(&video) //insert value to Database
+	db.connection.Create(&video)
 }
 
 func (db *Database) Update(video entity.Video) {
@@ -44,13 +47,5 @@ func (db *Database) FindAll() []entity.Video {
 }
 
 func (db *Database) Delete(video entity.Video) {
-	db.connection.Delete(video)
-}
-
-func (db *Database) Close() {
-	err := db.connection.Close()
-	if err != nil {
-		panic("Failed to close database")
-	}
-
+	db.connection.Delete(video, fmt.Sprintf("title='%v'", video.Title))
 }

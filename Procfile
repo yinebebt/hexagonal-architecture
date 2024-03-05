@@ -1,1 +1,1 @@
-web: bin/simpleAPI
+web: bin/simpleapi

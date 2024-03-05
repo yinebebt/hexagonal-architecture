@@ -8,20 +8,15 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
-	"gitlab.com/Yinebeb-01/simpleAPI/entity"
-	"gitlab.com/Yinebeb-01/simpleAPI/services"
-	"gitlab.com/Yinebeb-01/simpleAPI/validators"
+	"gitlab.com/Yinebeb-01/simpleapi/entity"
+	"gitlab.com/Yinebeb-01/simpleapi/services"
+	"gitlab.com/Yinebeb-01/simpleapi/validators"
 )
 
 type VideoController interface {
-	//apiroute
 	FindAll() []entity.Video
 	Save(*gin.Context) error
-
-	//show route
 	ShowAll(*gin.Context)
-
-	//for repositories
 	Delete(*gin.Context) error
 	Update(*gin.Context) error
 }
