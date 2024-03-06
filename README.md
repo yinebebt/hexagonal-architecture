@@ -4,7 +4,8 @@
 RESTful API built with Gin and GORM, demonstrating the principles of Hexagonal Architecture. 
 It manages video entities, allowing admins to create, and manage videos. 
 
-Explore the concept of Hexagonal Architecture further in this blog post: [Hexagonal-architecture]().
+Explore the concept of Hexagonal Architecture further in this blog post: 
+[Hexagonal-architecture](https://medium.com/@yinebeb-tariku/hexagonal-architecture-93a946776242).
 
 ## Installation
 Install **godog** binary:
