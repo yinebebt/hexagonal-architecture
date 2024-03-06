@@ -1,7 +1,6 @@
 stages:
   - compile
   - test
-  - deploy
 
 build:
   stage: compile
@@ -15,16 +14,3 @@ test:
   image: golang:latest
   script:
     - go test services/*.go
-
-staging:
-  stage: deploy
-  script:
-    - apt-get update -qy
-    - apt-get install -y ruby-dev
-    - gem install dpl
-    - dpl --provider=heroku --app=simple-api-yina --api-key=$HEROKU_API_KEY
-  environment:
-    name: Staging
-    url: https://simple-api-yina.herokuapp.com/
-  only:
-    - ci-cd
