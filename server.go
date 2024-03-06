@@ -33,7 +33,7 @@ func main() {
 	router.Static("/css", "./templates/css")
 	router.LoadHTMLGlob("./templates/*.html")
 
-	// Login Endpoint: Authentication + Token creation
+	// Login Endpoint: Authentication
 	router.POST("/login", func(ctx *gin.Context) {
 		token := loginController.Login(ctx)
 		if token != "" {
@@ -41,12 +41,12 @@ func main() {
 				"token": token,
 			})
 		} else {
-			ctx.JSON(http.StatusUnauthorized, nil)
+			ctx.JSON(http.StatusInternalServerError, nil)
 		}
 	})
 
 	//apiRoute group used to group 'api/*' endpoints.
-	apiRoute := router.Group("/api", middlewares.BasicAuth(), middlewares.AuthorizeJWT())
+	apiRoute := router.Group("/api", middlewares.AuthorizeJWT())
 	{
 		apiRoute.GET("/test", func(ctx *gin.Context) {
 			ctx.JSON(http.StatusOK, gin.H{
@@ -61,27 +61,27 @@ func main() {
 		apiRoute.POST("/videos", func(ctx *gin.Context) {
 			err := videoController.Save(ctx)
 			if err != nil {
-				ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+				ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			} else {
-				ctx.JSON(http.StatusBadRequest, gin.H{"message": "Video input is valid!"})
+				ctx.JSON(http.StatusOK, gin.H{"message": "Video added successfully!"})
 			}
 		})
 
 		apiRoute.PUT("/videos/:id", func(ctx *gin.Context) {
 			err := videoController.Update(ctx)
 			if err != nil {
-				ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+				ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			} else {
-				ctx.JSON(http.StatusBadRequest, gin.H{"message": "Video input is invalid!"})
+				ctx.JSON(http.StatusOK, gin.H{"message": "Video updated successfully!"})
 			}
 		})
 
 		apiRoute.DELETE("/videos/:id", func(ctx *gin.Context) {
 			err := videoController.Delete(ctx)
 			if err != nil {
-				ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+				ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			} else {
-				ctx.JSON(http.StatusBadRequest, gin.H{"message": "Video Deleted!"})
+				ctx.JSON(http.StatusOK, gin.H{"message": "Video deleted successfully!"})
 			}
 		})
 	}

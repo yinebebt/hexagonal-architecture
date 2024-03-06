@@ -67,7 +67,7 @@ func (c *controller) ShowAll(ctx *gin.Context) {
 	data := gin.H{
 		"title":  "Video Page",
 		"videos": videos,
-		"msg":    "BY Pragmatic review-yina",
+		"msg":    "By st-son admin",
 	}
 	ctx.HTML(http.StatusOK, "index.html", data)
 }

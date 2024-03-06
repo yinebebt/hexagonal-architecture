@@ -35,6 +35,7 @@ func AuthorizeJWT() gin.HandlerFunc {
 // BasicAuth wrap gin.BasicAuth which returns a Basic HTTP Authorization middleware
 func BasicAuth() gin.HandlerFunc {
 	return gin.BasicAuth(gin.Accounts{
-		"yinebeb": "silenat", //username: yinebeb ; password: silenat
+		"admin":     "admin1234",
+		"test_user": "user1234",
 	})
 }
