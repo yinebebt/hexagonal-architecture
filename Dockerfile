@@ -32,4 +32,4 @@ RUN find . -name "*.go" -type f -delete
 EXPOSE $PORT
 
 # Run the app
-CMD ["./simpleapi"]
+CMD ["./hexagonal_arch"]

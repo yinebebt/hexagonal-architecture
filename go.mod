@@ -1,4 +1,4 @@
-module gitlab.com/Yinebeb-01/simpleapi
+module gitlab.com/Yinebeb-01/hexagonalarch
 
 go 1.19
 

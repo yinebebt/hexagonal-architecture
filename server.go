@@ -7,38 +7,35 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"gitlab.com/Yinebeb-01/simpleapi/controller"
-	"gitlab.com/Yinebeb-01/simpleapi/middlewares"
-	"gitlab.com/Yinebeb-01/simpleapi/repository"
-	"gitlab.com/Yinebeb-01/simpleapi/services"
+	"gitlab.com/Yinebeb-01/hexagonalarch/controller"
+	"gitlab.com/Yinebeb-01/hexagonalarch/middlewares"
+	"gitlab.com/Yinebeb-01/hexagonalarch/repository"
+	"gitlab.com/Yinebeb-01/hexagonalarch/services"
 
 	dump "github.com/tpkeeper/gin-dump"
 )
 
 var (
-	videorepository repository.VideoReposiory = repository.NewVideoRepository()
-	lognservice     services.LoginService     = services.NewLoginService()
-	jwtservice      services.JWTService       = services.NewJWTService()
+	videoRepository = repository.NewVideoRepository()
+	loginService    = services.NewLoginService()
+	jwtService      = services.NewJWTService()
 
-	videoservice    services.VideoService      = services.New(videorepository)
-	videocontroller controller.VideoController = controller.New(videoservice)
-	logincontroller controller.LoginController = controller.NewLoginController(lognservice, jwtservice)
+	videoService    = services.New(videoRepository)
+	videoController = controller.New(videoService)
+	loginController = controller.NewLoginController(loginService, jwtService)
 )
 
 func main() {
 	configOutput()
-
 	router := gin.New()
-	//custome middlewares used, dump is an alise of gin-dum which used for debugging tool.
+	// middlewares dump is an alise of gin-dum which used for debugging tool.
 	router.Use(gin.Recovery(), middlewares.Logger(), dump.Dump())
-
-	//let we load static files
 	router.Static("/css", "./templates/css")
 	router.LoadHTMLGlob("./templates/*.html")
 
 	// Login Endpoint: Authentication + Token creation
 	router.POST("/login", func(ctx *gin.Context) {
-		token := logincontroller.Login(ctx)
+		token := loginController.Login(ctx)
 		if token != "" {
 			ctx.JSON(http.StatusOK, gin.H{
 				"token": token,
@@ -48,9 +45,8 @@ func main() {
 		}
 	})
 
-	// JWT Authorization Middleware applies to "/api" only. You can see/check the Basc Auth too
-	//apiRoute group is used to see/access api via endpoints.
-	apiRoute := router.Group("/api", middlewares.AuthorizeJWT()) //middlewares.BasicAuth()
+	//apiRoute group used to group 'api/*' endpoints.
+	apiRoute := router.Group("/api", middlewares.BasicAuth(), middlewares.AuthorizeJWT())
 	{
 		apiRoute.GET("/test", func(ctx *gin.Context) {
 			ctx.JSON(http.StatusOK, gin.H{
@@ -59,11 +55,11 @@ func main() {
 		})
 
 		apiRoute.GET("/videos", func(ctx *gin.Context) {
-			ctx.JSON(http.StatusOK, videocontroller.FindAll())
+			ctx.JSON(http.StatusOK, videoController.FindAll())
 		})
 
 		apiRoute.POST("/videos", func(ctx *gin.Context) {
-			err := videocontroller.Save(ctx)
+			err := videoController.Save(ctx)
 			if err != nil {
 				ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			} else {
@@ -72,16 +68,16 @@ func main() {
 		})
 
 		apiRoute.PUT("/videos/:id", func(ctx *gin.Context) {
-			err := videocontroller.Update(ctx)
+			err := videoController.Update(ctx)
 			if err != nil {
 				ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			} else {
-				ctx.JSON(http.StatusBadRequest, gin.H{"message": "Video input is valid!"})
+				ctx.JSON(http.StatusBadRequest, gin.H{"message": "Video input is invalid!"})
 			}
 		})
 
 		apiRoute.DELETE("/videos/:id", func(ctx *gin.Context) {
-			err := videocontroller.Delete(ctx)
+			err := videoController.Delete(ctx)
 			if err != nil {
 				ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			} else {
@@ -90,13 +86,12 @@ func main() {
 		})
 	}
 
-	//viewRoute Group will use to render static files-no need of authentication
+	//viewRoute Group will use to render static files
 	viewRoute := router.Group("/view")
 	{
-		viewRoute.GET("/videos", videocontroller.ShowAll)
+		viewRoute.GET("/videos", videoController.ShowAll)
 	}
 
-	//we can get port # from env variable
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
@@ -106,7 +101,7 @@ func main() {
 
 // configOutput create a custom logger file to see debugging outputs.
 func configOutput() {
-	writer, err := os.Create("simpleapi.log")
+	writer, err := os.Create("hexagonal_arch.log")
 	if err != nil {
 		fmt.Printf("unable to create log file")
 	}
