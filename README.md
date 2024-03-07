@@ -17,48 +17,30 @@ go install github.com/cucumber/godog/cmd/godog@latest
 Use `go test` command to run feature tests since godog's cli is deprecated.
 
 
-# Project Folder Structure
-
-This project follows a specific folder structure to organize its components effectively. Below is an explanation of each directory:
+## Project structure
 
 - `bin/`: Compiled binaries are stored in this directory after building the project.
 
 - `cmd/`: Contains command-line application entry points.
 
-    - `http/`: This subdirectory contains the HTTP server entry point.
-
-- `docs/`: Documentation related to the project is stored here.
-
 - `internal/`: Internal packages of the project are located here.
 
     - `adapter/`: Contains adapters for external systems.
 
-        - `cache/`: Cache adapters are stored in this directory.
+        - `handler/`: Handler adapters for different protocols (e.g., HTTP(REST), gRPC) are stored here.
 
-            - `redis/`: Redis cache adapter implementation resides here.
-
-        - `handler/`: Handler adapters for different protocols (e.g., HTTP, gRPC) are stored here.
-
-            - `http/`: HTTP handler adapter implementation is located in this directory.
+            - `rest/`: HTTP handler adapter implementation is located in this directory.
 
         - `repository/`: Repository adapters for various databases are stored here.
 
-            - `postgres/`: Postgres repository adapter implementation resides here.
-
-                - `migrations/`: Database migrations related to the Postgres repository adapter are stored here.
-
-        - `token/`: Token adapters for different token types (e.g., JWT, Paseto) are stored here.
-
-            - `paseto/`: Paseto token adapter implementation is located in this directory.
+            - `gorm(sqlite)/`: Gorm(sqlite) repository adapter implementation resides here.
 
     - `core/`: Contains the core business logic of the application.
 
-        - `domain/`: Domain entities representing specific objects within the application's domain are stored here.
+        - `entity/`: Domain entities representing specific objects within the application's domain are stored here.
 
         - `port/`: Ports (interfaces) defining interactions with adapters are stored in this directory.
 
         - `service/`: Core application services are located here.
 
         - `util/`: Utility functions and helpers used across the project are stored in this directory.
-
-This structured approach organizes the project components in a clear and systematic manner, making it easier to understand and maintain the codebase.
