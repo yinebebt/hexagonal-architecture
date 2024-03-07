@@ -1,14 +1,14 @@
-package services
+package service
 
 import (
 	"context"
 	"errors"
+	"gitlab.com/Yinebeb-01/hexagonalarch/internal/adapter/repository/gorm"
+	"gitlab.com/Yinebeb-01/hexagonalarch/internal/core/entity"
 	"testing"
 
 	"github.com/cucumber/godog"
 	"github.com/stretchr/testify/assert"
-	"gitlab.com/Yinebeb-01/hexagonalarch/entity"
-	"gitlab.com/Yinebeb-01/hexagonalarch/repository"
 )
 
 const (
@@ -18,19 +18,19 @@ const (
 )
 
 var (
-	videoRepository = repository.NewVideoRepository()
+	videoRepository = gorm.NewVideoRepository()
 	videoSer        = New(videoRepository)
-	video           = entity.Video{}
+	videoo          = entity.Video{}
 	t               *testing.T
 )
 
 func adminPostNoVideo() error {
-	video = entity.Video{}
+	videoo = entity.Video{}
 	return nil
 }
 
 func adminPostSomeVideo() {
-	video = entity.Video{
+	videoo = entity.Video{
 		Title:       "yy cool",
 		Description: "fy oto",
 		URL:         "https://www.yoe.com/embed/96np1mk",
@@ -41,7 +41,7 @@ func adminPostSomeVideo() {
 			Email:     "yintar@gmail.com",
 		},
 	}
-	videoSer.Save(video)
+	videoSer.Save(videoo)
 }
 
 func adminRunFindAllMethod() error {
@@ -50,7 +50,7 @@ func adminRunFindAllMethod() error {
 
 func videoShouldBeVideo() error {
 	videoRes := videoSer.FindAll()[0]
-	if videoRes.Title == video.Title && videoRes.Description == video.Description {
+	if videoRes.Title == videoo.Title && videoRes.Description == videoo.Description {
 		return nil
 	} else {
 		return errors.New("not video")
@@ -68,9 +68,9 @@ func videoShouldBeNull() error {
 
 func InitializeScenario(ctx *godog.ScenarioContext) {
 	ctx.Before(func(ctx context.Context, sc *godog.Scenario) (context.Context, error) {
-		videoRepository = repository.NewVideoRepository()
+		videoRepository = gorm.NewVideoRepository()
 		videoSer = New(videoRepository)
-		video = entity.Video{}
+		videoo = entity.Video{}
 
 		return ctx, nil
 	})
@@ -82,7 +82,7 @@ func InitializeScenario(ctx *godog.ScenarioContext) {
 	ctx.Step(`^video should be null$`, videoShouldBeNull)
 
 	ctx.After(func(ctx context.Context, sc *godog.Scenario, err error) (context.Context, error) {
-		videoRepository.Delete(video)
+		videoRepository.Delete(videoo)
 		return ctx, nil
 	})
 }
@@ -103,7 +103,7 @@ func TestFeatures(t *testing.T) {
 }
 
 func TestFindAll(t *testing.T) {
-	video := repository.NewVideoRepository()
+	video := gorm.NewVideoRepository()
 	service := New(video)
 
 	service.Save(getVideo())

@@ -2,7 +2,7 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"gitlab.com/Yinebeb-01/hexagonalarch/dto"
+	"gitlab.com/Yinebeb-01/hexagonalarch/internal/adapter/dto"
 	"gitlab.com/Yinebeb-01/hexagonalarch/services"
 )
 

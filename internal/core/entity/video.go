@@ -10,7 +10,6 @@ type Person struct {
 	Email     string `json:"email" validate:"required,email" gorm:"type:varchar(256)"`
 }
 
-
 type Video struct {
 	ID          uint64    `gorm:"primary_key;auto_increment" json:"idd"`
 	Title       string    `json:"title" binding:"min=3,max=10" validate:"is-cool" gorm:"type:varchar(10)"`
@@ -21,4 +20,3 @@ type Video struct {
 	CreatedAt   time.Time `json:"-" gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
 	UpdatedAt   time.Time `json:"-" gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
 }
-
