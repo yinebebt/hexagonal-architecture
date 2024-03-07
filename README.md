@@ -1,4 +1,5 @@
 # Hexagonal-architecture
+![build-workflow](https://github.com/Yinebeb-01/hexagonal-architecture/actions/workflows/build-and-test.yml/badge.svg)
 
 RESTful API built with Gin and GORM, demonstrating the principles of Hexagonal Architecture. 
 It manages video entities, allowing admins to create, and manage videos. 

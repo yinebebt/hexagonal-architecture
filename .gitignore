@@ -3,3 +3,4 @@ services/test.db
 .idea/*
 /godog_dependency_file_test.go
 /simpleapi.log
+/hexagonal_arch.log
