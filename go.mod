@@ -2,8 +2,6 @@ module gitlab.com/Yinebeb-01/hexagonalarch
 
 go 1.21
 
-toolchain go1.22.0
-
 require (
 	github.com/cucumber/godog v0.12.5
 	github.com/gin-gonic/gin v1.9.1
