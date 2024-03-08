@@ -1,12 +1,12 @@
 package middleware
 
 import (
+	"gitlab.com/Yinebeb-01/hexagonalarch/internal/core/service"
 	"log"
 	"net/http"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
-	"gitlab.com/Yinebeb-01/hexagonalarch/services"
 )
 
 // AuthorizeJWT validates the token from the http request, returning a 401 if it's not valid
@@ -16,7 +16,7 @@ func AuthorizeJWT() gin.HandlerFunc {
 		authHeader := c.GetHeader("Authorization")
 		tokenString := authHeader[len(BearerSchema):]
 
-		token, err := services.NewJWTService().ValidateToken(tokenString)
+		token, err := service.NewJWTService().ValidateToken(tokenString)
 
 		if token.Valid {
 			claims := token.Claims.(jwt.MapClaims)

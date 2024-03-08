@@ -18,8 +18,8 @@ type video struct {
 
 var cool *validator.Validate // custom validation
 
-// Init is a constructor to initialize VideoHandler
-func Init(videoSer service.VideoService) port.VideoHandler {
+// InitVideo is a constructor to initialize VideoHandler
+func InitVideo(videoSer service.VideoService) port.VideoHandler {
 	cool = validator.New()
 	err := cool.RegisterValidation("is-cool", util.CoolTitleValidator)
 	if err != nil {

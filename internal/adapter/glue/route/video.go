@@ -1,14 +1,15 @@
-package glue
+package route
 
 import (
 	"github.com/gin-gonic/gin"
+	"gitlab.com/Yinebeb-01/hexagonalarch/internal/adapter/glue"
 	middlewares2 "gitlab.com/Yinebeb-01/hexagonalarch/internal/adapter/handler/middleware"
 	"gitlab.com/Yinebeb-01/hexagonalarch/internal/core/port"
 	"net/http"
 )
 
 func InitVideoRoute(grp *gin.RouterGroup, video port.VideoHandler) {
-	videoRoutes := []Router{
+	videoRoutes := []glue.Router{
 		{
 			Method:  http.MethodPost,
 			Path:    "/videos",
@@ -34,7 +35,16 @@ func InitVideoRoute(grp *gin.RouterGroup, video port.VideoHandler) {
 			},
 		},
 	}
+	viewRoutes := []glue.Router{
+		{
+			Method:  http.MethodGet,
+			Handler: video.ShowAll,
+			Path:    "/videos",
+		},
+	}
 
 	//apiRoute group used to group 'api/*' endpoints.
-	RegisterRoutes(grp.Group("/api"), videoRoutes, []gin.HandlerFunc{middlewares2.AuthorizeJWT()})
+	glue.RegisterRoutes(grp.Group("/api"), videoRoutes, []gin.HandlerFunc{middlewares2.AuthorizeJWT()})
+	//viewRoute Group will use to render static files
+	glue.RegisterRoutes(grp.Group("/view"), viewRoutes, []gin.HandlerFunc{})
 }

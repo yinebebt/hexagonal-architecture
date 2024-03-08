@@ -44,3 +44,30 @@ Use `go test` command to run feature tests since godog's cli is deprecated.
         - `service/`: Core application services are located here.
 
         - `util/`: Utility functions and helpers used across the project are stored in this directory.
+
+
+```
+/app
+|-- /cmd
+|   |-- main.go
+|-- /docs   
+|-- /internal
+|   |-- /adapter
+|   |   |-- /handler
+|   |   |   |-- /rest
+|   |   |   |-- /gRPC
+|   |   |-- /reository
+|   |   |   |-- /gorm
+|   |   |   |-- /mongo
+|   |   |-- /glue
+|   |   |   |-- /route
+|   |   |   |-- route.go
+|   |   |-- /dto
+|   |   |-- /templates
+|   |-- /core
+|   |   |-- /entity
+|   |   |-- /port
+|   |   |-- /service
+|   |   |   |-- /test
+|   |   |-- /util   
+```

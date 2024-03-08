@@ -1,4 +1,4 @@
-package services
+package service
 
 import (
 	"fmt"
@@ -13,8 +13,8 @@ type JWTService interface {
 	ValidateToken(tokenString string) (*jwt.Token, error)
 }
 
-// jwtCustomClaims are custom claims extending default ones.
-type jwtCustomClaims struct {
+// customClaims are custom claims extending default ones.
+type customClaims struct {
 	Name  string `json:"name"`
 	Admin bool   `json:"admin"`
 	jwt.StandardClaims
@@ -25,13 +25,6 @@ type jwtService struct {
 	issuer    string
 }
 
-func NewJWTService() JWTService {
-	return &jwtService{
-		secretKey: getSecretKey(),
-		issuer:    "hexagonal_arch.com",
-	}
-}
-
 func getSecretKey() string {
 	secret := os.Getenv("JWT_SECRET")
 	if secret == "" {
@@ -40,9 +33,16 @@ func getSecretKey() string {
 	return secret
 }
 
-// GenerateTOken returns a jwt claim which is signed with a secretkey
+func NewJWTService() JWTService {
+	return &jwtService{
+		secretKey: getSecretKey(),
+		issuer:    "abc.com",
+	}
+}
+
+// GenerateToken returns a jwt claim which is signed with a secret key
 func (jwtSrv *jwtService) GenerateToken(username string, admin bool) string {
-	claims := &jwtCustomClaims{
+	claims := &customClaims{
 		username,
 		admin,
 		jwt.StandardClaims{
@@ -62,7 +62,7 @@ func (jwtSrv *jwtService) GenerateToken(username string, admin bool) string {
 	return t
 }
 
-// ValidateToken do token valiidation
+// ValidateToken do token validation
 func (jwtSrv *jwtService) ValidateToken(tokenString string) (*jwt.Token, error) {
 	return jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		// Signing method validation
