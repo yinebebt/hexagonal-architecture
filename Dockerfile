@@ -19,7 +19,7 @@ RUN go mod download
 # Copy all the app sources (recursively copies files and directories from the host into the image)
 COPY . .
 
-# Set http port
+# Set rest port
 ENV PORT 5000
 
 # Build the app

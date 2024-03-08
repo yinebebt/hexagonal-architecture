@@ -1,24 +1,18 @@
-package repository
+package gorm
 
 import (
 	"fmt"
-	"gitlab.com/Yinebeb-01/hexagonalarch/entity"
+	"gitlab.com/Yinebeb-01/hexagonalarch/internal/core/entity"
+	"gitlab.com/Yinebeb-01/hexagonalarch/internal/core/port"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
-
-type VideoRepository interface {
-	Save(entity.Video)
-	Update(entity.Video)
-	Delete(entity.Video)
-	FindAll() []entity.Video
-}
 
 type Database struct {
 	connection *gorm.DB
 }
 
-func NewVideoRepository() VideoRepository {
+func NewVideoRepository() port.VideoRepository {
 	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
 	if err != nil {
 		panic("Failed to create a DB.")
@@ -47,6 +41,7 @@ func (db *Database) FindAll() []entity.Video {
 	return videos
 }
 
+// fixme: query via unique id
 func (db *Database) Delete(video entity.Video) {
 	db.connection.Delete(video, fmt.Sprintf("title='%v'", video.Title))
 }

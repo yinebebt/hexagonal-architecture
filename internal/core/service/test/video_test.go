@@ -1,14 +1,15 @@
-package services
+package test
 
 import (
 	"context"
 	"errors"
+	"gitlab.com/Yinebeb-01/hexagonalarch/internal/adapter/repository/gorm"
+	"gitlab.com/Yinebeb-01/hexagonalarch/internal/core/entity"
+	"gitlab.com/Yinebeb-01/hexagonalarch/internal/core/service"
 	"testing"
 
 	"github.com/cucumber/godog"
 	"github.com/stretchr/testify/assert"
-	"gitlab.com/Yinebeb-01/hexagonalarch/entity"
-	"gitlab.com/Yinebeb-01/hexagonalarch/repository"
 )
 
 const (
@@ -18,8 +19,8 @@ const (
 )
 
 var (
-	videoRepository = repository.NewVideoRepository()
-	videoSer        = New(videoRepository)
+	videoRepository = gorm.NewVideoRepository()
+	videoSer        = service.New(videoRepository)
 	video           = entity.Video{}
 	t               *testing.T
 )
@@ -31,14 +32,14 @@ func adminPostNoVideo() error {
 
 func adminPostSomeVideo() {
 	video = entity.Video{
-		Title:       "yy cool",
-		Description: "fy oto",
+		Title:       "cool video",
+		Description: "video description",
 		URL:         "https://www.yoe.com/embed/96np1mk",
 		Director: entity.Person{
-			FirstName: "yina",
-			LastName:  "tarku",
-			Age:       45,
-			Email:     "yintar@gmail.com",
+			FirstName: "Abel",
+			LastName:  "Yisak",
+			Age:       25,
+			Email:     "abel@gmail.com",
 		},
 	}
 	videoSer.Save(video)
@@ -68,8 +69,8 @@ func videoShouldBeNull() error {
 
 func InitializeScenario(ctx *godog.ScenarioContext) {
 	ctx.Before(func(ctx context.Context, sc *godog.Scenario) (context.Context, error) {
-		videoRepository = repository.NewVideoRepository()
-		videoSer = New(videoRepository)
+		videoRepository = gorm.NewVideoRepository()
+		videoSer = service.New(videoRepository)
 		video = entity.Video{}
 
 		return ctx, nil
@@ -103,8 +104,8 @@ func TestFeatures(t *testing.T) {
 }
 
 func TestFindAll(t *testing.T) {
-	video := repository.NewVideoRepository()
-	service := New(video)
+	video := gorm.NewVideoRepository()
+	service := service.New(video)
 
 	service.Save(getVideo())
 
