@@ -1,9 +1,9 @@
 package route
 
 import (
+	"github.com/Yinebeb-01/hexagonalarch/internal/adapter/glue"
+	"github.com/Yinebeb-01/hexagonalarch/internal/core/port"
 	"github.com/gin-gonic/gin"
-	"gitlab.com/Yinebeb-01/hexagonalarch/internal/adapter/glue"
-	"gitlab.com/Yinebeb-01/hexagonalarch/internal/core/port"
 	"net/http"
 )
 

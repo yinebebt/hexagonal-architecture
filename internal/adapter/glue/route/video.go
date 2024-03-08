@@ -1,10 +1,10 @@
 package route
 
 import (
+	"github.com/Yinebeb-01/hexagonalarch/internal/adapter/glue"
+	middlewares2 "github.com/Yinebeb-01/hexagonalarch/internal/adapter/handler/middleware"
+	"github.com/Yinebeb-01/hexagonalarch/internal/core/port"
 	"github.com/gin-gonic/gin"
-	"gitlab.com/Yinebeb-01/hexagonalarch/internal/adapter/glue"
-	middlewares2 "gitlab.com/Yinebeb-01/hexagonalarch/internal/adapter/handler/middleware"
-	"gitlab.com/Yinebeb-01/hexagonalarch/internal/core/port"
 	"net/http"
 )
 

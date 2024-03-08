@@ -2,8 +2,8 @@ package gorm
 
 import (
 	"fmt"
-	"gitlab.com/Yinebeb-01/hexagonalarch/internal/core/entity"
-	"gitlab.com/Yinebeb-01/hexagonalarch/internal/core/port"
+	"github.com/Yinebeb-01/hexagonalarch/internal/core/entity"
+	"github.com/Yinebeb-01/hexagonalarch/internal/core/port"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )

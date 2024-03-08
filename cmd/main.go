@@ -1,12 +1,12 @@
 package main
 
 import (
-	"gitlab.com/Yinebeb-01/hexagonalarch/docs"
-	"gitlab.com/Yinebeb-01/hexagonalarch/internal/adapter/glue/route"
-	"gitlab.com/Yinebeb-01/hexagonalarch/internal/adapter/handler/middleware"
-	"gitlab.com/Yinebeb-01/hexagonalarch/internal/adapter/handler/rest"
-	"gitlab.com/Yinebeb-01/hexagonalarch/internal/adapter/repository/gorm"
-	"gitlab.com/Yinebeb-01/hexagonalarch/internal/core/service"
+	"github.com/Yinebeb-01/hexagonalarch/docs"
+	"github.com/Yinebeb-01/hexagonalarch/internal/adapter/glue/route"
+	"github.com/Yinebeb-01/hexagonalarch/internal/adapter/handler/middleware"
+	"github.com/Yinebeb-01/hexagonalarch/internal/adapter/handler/rest"
+	"github.com/Yinebeb-01/hexagonalarch/internal/adapter/repository/gorm"
+	"github.com/Yinebeb-01/hexagonalarch/internal/core/service"
 	"io"
 	"log"
 	"os"
@@ -63,7 +63,7 @@ func main() {
 
 // configOutput create a custom logger file to see debugging outputs.
 func configOutput() {
-	writer, err := os.Create("hexagonal_arch.log")
+	writer, err := os.Create("hexagonalarch.log")
 	if err != nil {
 		log.Println("unable to create log file")
 	}

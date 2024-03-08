@@ -2,12 +2,12 @@ package rest
 
 import (
 	"errors"
+	"github.com/Yinebeb-01/hexagonalarch/internal/core/entity"
+	"github.com/Yinebeb-01/hexagonalarch/internal/core/port"
+	"github.com/Yinebeb-01/hexagonalarch/internal/core/service"
+	"github.com/Yinebeb-01/hexagonalarch/internal/core/util"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
-	"gitlab.com/Yinebeb-01/hexagonalarch/internal/core/entity"
-	"gitlab.com/Yinebeb-01/hexagonalarch/internal/core/port"
-	"gitlab.com/Yinebeb-01/hexagonalarch/internal/core/service"
-	"gitlab.com/Yinebeb-01/hexagonalarch/internal/core/util"
 	"net/http"
 	"strconv"
 )

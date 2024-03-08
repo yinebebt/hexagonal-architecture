@@ -1,10 +1,10 @@
 package rest
 
 import (
+	"github.com/Yinebeb-01/hexagonalarch/internal/adapter/dto"
+	"github.com/Yinebeb-01/hexagonalarch/internal/core/port"
+	"github.com/Yinebeb-01/hexagonalarch/internal/core/service"
 	"github.com/gin-gonic/gin"
-	"gitlab.com/Yinebeb-01/hexagonalarch/internal/adapter/dto"
-	"gitlab.com/Yinebeb-01/hexagonalarch/internal/core/port"
-	"gitlab.com/Yinebeb-01/hexagonalarch/internal/core/service"
 	"net/http"
 )
 
