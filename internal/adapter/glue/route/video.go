@@ -44,7 +44,7 @@ func InitVideoRoute(grp *gin.RouterGroup, video port.VideoHandler) {
 	}
 
 	//apiRoute group used to group 'api/*' endpoints.
-	glue.RegisterRoutes(grp.Group("/api"), videoRoutes, []gin.HandlerFunc{middlewares2.AuthorizeJWT()})
+	glue.RegisterRoutes(grp.Group(""), videoRoutes, []gin.HandlerFunc{middlewares2.AuthorizeJWT()})
 	//viewRoute Group will use to render static files
 	glue.RegisterRoutes(grp.Group("/view"), viewRoutes, []gin.HandlerFunc{})
 }

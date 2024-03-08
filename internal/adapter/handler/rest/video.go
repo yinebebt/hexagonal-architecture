@@ -31,6 +31,16 @@ func InitVideo(videoSer service.VideoService) port.VideoHandler {
 }
 
 // Save will bind a video-from a POST request body and append it to Videos.
+// @Summary      Save video
+// @Description  Save video description
+// @Tags         Video
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  entity.Video
+// @Failure      400  {object}  map[string]string
+// @Failure      404  {object}  map[string]string
+// @Failure      500  {object}  map[string]string
+// @Router       /videos [post]
 func (v *video) Save(ctx *gin.Context) {
 	req := entity.Video{}
 	if err := ctx.ShouldBindJSON(&req); err != nil {
@@ -48,12 +58,32 @@ func (v *video) Save(ctx *gin.Context) {
 }
 
 // FindAll will return videos, (use in a GET request endpoint).
+// @Summary      FindAll video
+// @Description  FindAll video description
+// @Tags         Video
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  entity.Video
+// @Failure      400  {object}  map[string]string
+// @Failure      404  {object}  map[string]string
+// @Failure      500  {object}  map[string]string
+// @Router       /videos [get]
 func (v *video) FindAll(ctx *gin.Context) {
 	res := v.videoService.FindAll()
 	ctx.JSON(http.StatusOK, res)
 }
 
 // ShowAll shows the list of videos via some rendered html/css-format
+// @Summary      ShowAll video
+// @Description  Show all video description
+// @Tags         Video
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  entity.Video
+// @Failure      400  {object}  map[string]string
+// @Failure      404  {object}  map[string]string
+// @Failure      500  {object}  map[string]string
+// @Router       /all-videos [get]
 func (v *video) ShowAll(ctx *gin.Context) {
 	videos := v.videoService.FindAll()
 	data := gin.H{
@@ -64,6 +94,17 @@ func (v *video) ShowAll(ctx *gin.Context) {
 	ctx.HTML(http.StatusOK, "index.html", data)
 }
 
+// Delete
+// @Summary      Delete video
+// @Description  Delete video description
+// @Tags         Video
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  entity.Video
+// @Failure      400  {object}  map[string]string
+// @Failure      404  {object}  map[string]string
+// @Failure      500  {object}  map[string]string
+// @Router       /videos [delete]
 func (v *video) Delete(ctx *gin.Context) {
 	video := entity.Video{}
 	id, err := strconv.ParseUint(ctx.Param("id"), 0, 0)
@@ -77,6 +118,17 @@ func (v *video) Delete(ctx *gin.Context) {
 	return
 }
 
+// Update
+// @Summary      Update video
+// @Description  Update video description
+// @Tags         Video
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  entity.Video
+// @Failure      400  {object}  map[string]string
+// @Failure      404  {object}  map[string]string
+// @Failure      500  {object}  map[string]string
+// @Router       /videos [put]
 func (v *video) Update(ctx *gin.Context) {
 	var video entity.Video
 	err := ctx.ShouldBindJSON(&video)
