@@ -1,0 +1,245 @@
+basePath: /v1
+definitions:
+  entity.Person:
+    properties:
+      age:
+        maximum: 127
+        minimum: 10
+        type: integer
+      email:
+        type: string
+      firstname:
+        type: string
+      id:
+        type: integer
+      lastname:
+        type: string
+    required:
+    - email
+    - firstname
+    - lastname
+    type: object
+  entity.Video:
+    properties:
+      author:
+        $ref: '#/definitions/entity.Person'
+      description:
+        maxLength: 25
+        type: string
+      idd:
+        type: integer
+      title:
+        maxLength: 10
+        minLength: 3
+        type: string
+      url:
+        type: string
+    required:
+    - author
+    - url
+    type: object
+host: localhost
+info:
+  contact:
+    email: yintar5@gmail.com
+    name: yinebe-tariku
+    url: https://www.linkedin.com/yinebeb-tariku
+  title: hexagonal-architecture
+  version: 0.1.0
+paths:
+  /all-videos:
+    get:
+      consumes:
+      - application/json
+      description: Show all video description
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Video'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: ShowAll video
+      tags:
+      - Video
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: login user description
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Login user
+      tags:
+      - User
+  /videos:
+    delete:
+      consumes:
+      - application/json
+      description: Delete video description
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Video'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete video
+      tags:
+      - Video
+    get:
+      consumes:
+      - application/json
+      description: FindAll video description
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Video'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: FindAll video
+      tags:
+      - Video
+    post:
+      consumes:
+      - application/json
+      description: Save video description
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Video'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Save video
+      tags:
+      - Video
+    put:
+      consumes:
+      - application/json
+      description: Update video description
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Video'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update video
+      tags:
+      - Video
+swagger: "2.0"

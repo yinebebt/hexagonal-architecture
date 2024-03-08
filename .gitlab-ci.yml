@@ -7,7 +7,7 @@ build:
   image: golang:latest
   script:
     - go get -d -v
-    - go build -o bin/hexagonal_arch -v .
+    - go build -o bin/hexagonalarch -v .
 
 test:
   stage: test

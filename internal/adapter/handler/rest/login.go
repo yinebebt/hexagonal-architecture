@@ -1,10 +1,10 @@
 package rest
 
 import (
+	"github.com/Yinebeb-01/hexagonalarch/internal/adapter/dto"
+	"github.com/Yinebeb-01/hexagonalarch/internal/core/port"
+	"github.com/Yinebeb-01/hexagonalarch/internal/core/service"
 	"github.com/gin-gonic/gin"
-	"gitlab.com/Yinebeb-01/hexagonalarch/internal/adapter/dto"
-	"gitlab.com/Yinebeb-01/hexagonalarch/internal/core/port"
-	"gitlab.com/Yinebeb-01/hexagonalarch/internal/core/service"
 	"net/http"
 )
 
@@ -20,6 +20,17 @@ func InitLogin(loginService service.LoginService, jwtService service.JWTService)
 	}
 }
 
+// Login
+// @Summary      Login user
+// @Description  login user description
+// @Tags         User
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  string
+// @Failure      400  {object}  map[string]string
+// @Failure      404  {object}  map[string]string
+// @Failure      500  {object}  map[string]string
+// @Router       /login [post]
 func (l *login) Login(ctx *gin.Context) {
 	var credentials dto.Credentials
 	err := ctx.ShouldBind(&credentials)

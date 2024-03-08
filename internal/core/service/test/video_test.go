@@ -3,9 +3,9 @@ package test
 import (
 	"context"
 	"errors"
-	"gitlab.com/Yinebeb-01/hexagonalarch/internal/adapter/repository/gorm"
-	"gitlab.com/Yinebeb-01/hexagonalarch/internal/core/entity"
-	"gitlab.com/Yinebeb-01/hexagonalarch/internal/core/service"
+	"github.com/Yinebeb-01/hexagonalarch/internal/adapter/repository/gorm"
+	"github.com/Yinebeb-01/hexagonalarch/internal/core/entity"
+	"github.com/Yinebeb-01/hexagonalarch/internal/core/service"
 	"testing"
 
 	"github.com/cucumber/godog"

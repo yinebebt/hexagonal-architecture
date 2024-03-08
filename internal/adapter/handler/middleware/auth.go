@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"gitlab.com/Yinebeb-01/hexagonalarch/internal/core/service"
+	"github.com/Yinebeb-01/hexagonalarch/internal/core/service"
 	"log"
 	"net/http"
 

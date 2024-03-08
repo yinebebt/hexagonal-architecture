@@ -1,8 +1,8 @@
 package service
 
 import (
-	"gitlab.com/Yinebeb-01/hexagonalarch/internal/core/entity"
-	"gitlab.com/Yinebeb-01/hexagonalarch/internal/core/port"
+	"github.com/Yinebeb-01/hexagonalarch/internal/core/entity"
+	"github.com/Yinebeb-01/hexagonalarch/internal/core/port"
 )
 
 type VideoService interface {
