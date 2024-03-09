@@ -29,8 +29,8 @@ var (
 
 // @title hexagonal-architecture
 // @version         0.1.0
-// @contact.name   yinebe-tariku
-// @contact.url    https://www.linkedin.com/yinebeb-tariku
+// @contact.name   Yinebe T.
+// @contact.url    www.linkedin.com/in/yinebeb-tariku
 // @contact.email  yintar5@gmail.com
 // @host localhost
 // @BasePath  /v1
@@ -63,7 +63,7 @@ func main() {
 
 // configOutput create a custom logger file to see debugging outputs.
 func configOutput() {
-	writer, err := os.Create("hexagonalarch.log")
+	writer, err := os.Create("app.log")
 	if err != nil {
 		log.Println("unable to create log file")
 	}
