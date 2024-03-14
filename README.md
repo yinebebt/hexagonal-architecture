@@ -11,8 +11,8 @@ can build scalable and maintainable systems with ease.
 In this demo, the core business functionality revolves around managing user and video entities.
 Administrators have the capability to manage videos, while users are provided with access to view the available videos.
 
-Explore the concept of Hexagonal Architecture further in this blog post: 
-[Hexagonal-architecture](https://medium.com/@yinebeb-tariku/hexagonal-architecture-93a946776242).
+Explore the concept of Hexagonal Architecture further
+in [Hexagonal-architecture](https://medium.com/@yinebeb-tariku/hexagonal-architecture-93a946776242).
 
 ## Adapters
 
@@ -20,7 +20,7 @@ Explore the concept of Hexagonal Architecture further in this blog post:
 
 - [x] REST API - GIN
 - [ ] gRPC
-- [ ] GraphQl
+- [ ] GraphQL
 -  [ ] WebSocket
 
 ### Repository
