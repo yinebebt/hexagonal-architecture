@@ -16,5 +16,5 @@ type VideoHandler interface {
 }
 
 type LoginHandler interface {
-	Login(ctx *gin.Context)
+	Login(ctx interface{})
 }

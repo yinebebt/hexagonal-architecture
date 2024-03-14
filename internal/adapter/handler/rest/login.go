@@ -5,6 +5,7 @@ import (
 	"github.com/Yinebeb-01/hexagonalarch/internal/core/port"
 	"github.com/Yinebeb-01/hexagonalarch/internal/core/service"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 )
 
@@ -31,24 +32,30 @@ func InitLogin(loginService service.LoginService, jwtService service.JWTService)
 // @Failure      404  {object}  map[string]string
 // @Failure      500  {object}  map[string]string
 // @Router       /login [post]
-func (l *login) Login(ctx *gin.Context) {
+func (l *login) Login(ctx interface{}) {
 	var credentials dto.Credentials
-	err := ctx.ShouldBind(&credentials)
+	ginCtx, ok := ctx.(*gin.Context)
+	if !ok {
+		log.Printf("unable to assert interface as *gin.Context, got %T", ctx)
+		return
+	}
+
+	err := ginCtx.ShouldBind(&credentials)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"message": "invalid input"})
+		ginCtx.JSON(http.StatusBadRequest, gin.H{"message": "invalid input"})
 		return
 	}
 	if !l.loginService.Login(credentials.Username, credentials.Password) {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"message": "invalid credentials"})
+		ginCtx.JSON(http.StatusUnauthorized, gin.H{"message": "invalid credentials"})
 		return
 	}
 	token := l.jWtService.GenerateToken(credentials.Username, true)
 
 	if token == "" {
-		ctx.JSON(http.StatusInternalServerError, nil)
+		ginCtx.JSON(http.StatusInternalServerError, nil)
 		return
 	}
-	ctx.JSON(http.StatusOK, gin.H{
+	ginCtx.JSON(http.StatusOK, gin.H{
 		"token": token,
 	})
 }
