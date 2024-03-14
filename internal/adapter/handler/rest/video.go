@@ -41,19 +41,20 @@ func InitVideo(videoSer service.VideoService) port.VideoHandler {
 // @Failure      404  {object}  map[string]string
 // @Failure      500  {object}  map[string]string
 // @Router       /videos [post]
-func (v *video) Save(ctx *gin.Context) {
+func (v *video) Save(ctx interface{}) {
+	ginCtx := CastContext(ctx)
 	req := entity.Video{}
-	if err := ctx.ShouldBindJSON(&req); err != nil {
+	if err := ginCtx.ShouldBindJSON(&req); err != nil {
 		err = errors.New("invalid input")
-		_ = ctx.Error(err)
+		_ = ginCtx.Error(err)
 		return
 	}
 
 	vid, err := v.videoService.Save(req)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		ginCtx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	} else {
-		ctx.JSON(http.StatusOK, gin.H{"data": vid})
+		ginCtx.JSON(http.StatusOK, gin.H{"data": vid})
 	}
 }
 
@@ -68,9 +69,10 @@ func (v *video) Save(ctx *gin.Context) {
 // @Failure      404  {object}  map[string]string
 // @Failure      500  {object}  map[string]string
 // @Router       /videos [get]
-func (v *video) FindAll(ctx *gin.Context) {
+func (v *video) FindAll(ctx interface{}) {
+	ginCtx := CastContext(ctx)
 	res := v.videoService.FindAll()
-	ctx.JSON(http.StatusOK, res)
+	ginCtx.JSON(http.StatusOK, res)
 }
 
 // ShowAll shows the list of videos via some rendered html/css-format
@@ -84,14 +86,16 @@ func (v *video) FindAll(ctx *gin.Context) {
 // @Failure      404  {object}  map[string]string
 // @Failure      500  {object}  map[string]string
 // @Router       /all-videos [get]
-func (v *video) ShowAll(ctx *gin.Context) {
+// Deprecated: ShowAll is deprecated, use FindAll instead
+func (v *video) ShowAll(ctx interface{}) {
+	ginCtx := CastContext(ctx)
 	videos := v.videoService.FindAll()
 	data := gin.H{
 		"title":  "Video Page",
 		"videos": videos,
 		"msg":    "By st-son admin",
 	}
-	ctx.HTML(http.StatusOK, "index.html", data)
+	ginCtx.HTML(http.StatusOK, "index.html", data)
 }
 
 // Delete
@@ -105,16 +109,17 @@ func (v *video) ShowAll(ctx *gin.Context) {
 // @Failure      404  {object}  map[string]string
 // @Failure      500  {object}  map[string]string
 // @Router       /videos [delete]
-func (v *video) Delete(ctx *gin.Context) {
+func (v *video) Delete(ctx interface{}) {
+	ginCtx := CastContext(ctx)
 	video := entity.Video{}
-	id, err := strconv.ParseUint(ctx.Param("id"), 0, 0)
+	id, err := strconv.ParseUint(ginCtx.Param("id"), 0, 0)
 	if err != nil {
-		_ = ctx.Error(err)
+		_ = ginCtx.Error(err)
 		return
 	}
 	video.ID = id
 	v.videoService.Delete(video)
-	ctx.JSON(http.StatusOK, gin.H{"message": "video deleted successfully!"})
+	ginCtx.JSON(http.StatusOK, gin.H{"message": "video deleted successfully!"})
 	return
 }
 
@@ -129,17 +134,18 @@ func (v *video) Delete(ctx *gin.Context) {
 // @Failure      404  {object}  map[string]string
 // @Failure      500  {object}  map[string]string
 // @Router       /videos [put]
-func (v *video) Update(ctx *gin.Context) {
+func (v *video) Update(ctx interface{}) {
+	ginCtx := CastContext(ctx)
 	var video entity.Video
-	err := ctx.ShouldBindJSON(&video)
+	err := ginCtx.ShouldBindJSON(&video)
 	if err != nil {
-		_ = ctx.Error(err)
+		_ = ginCtx.Error(err)
 		return
 	}
 
-	id, err := strconv.ParseUint(ctx.Param("id"), 0, 0)
+	id, err := strconv.ParseUint(ginCtx.Param("id"), 0, 0)
 	if err != nil {
-		_ = ctx.Error(err)
+		_ = ginCtx.Error(err)
 		return
 	}
 	video.ID = id
@@ -147,9 +153,9 @@ func (v *video) Update(ctx *gin.Context) {
 	//validate your custom validator here
 	err = cool.Struct(video)
 	if err != nil {
-		_ = ctx.Error(err)
+		_ = ginCtx.Error(err)
 		return
 	}
 	res := v.videoService.Update(video)
-	ctx.JSON(http.StatusCreated, gin.H{"data": res})
+	ginCtx.JSON(http.StatusCreated, gin.H{"data": res})
 }

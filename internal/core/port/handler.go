@@ -1,18 +1,11 @@
 package port
 
-import (
-	"github.com/gin-gonic/gin"
-)
-
-// Todo: better if interfaces are generic and protocol independent
-
-// VideoHandler for REST API
 type VideoHandler interface {
-	Save(ctx *gin.Context)
-	FindAll(ctx *gin.Context)
-	ShowAll(ctx *gin.Context)
-	Update(ctx *gin.Context)
-	Delete(Ctx *gin.Context)
+	Save(ctx interface{})
+	FindAll(ctx interface{})
+	ShowAll(ctx interface{})
+	Update(ctx interface{})
+	Delete(ctx interface{})
 }
 
 type LoginHandler interface {

@@ -5,7 +5,6 @@ import (
 	"github.com/Yinebeb-01/hexagonalarch/internal/core/port"
 	"github.com/Yinebeb-01/hexagonalarch/internal/core/service"
 	"github.com/gin-gonic/gin"
-	"log"
 	"net/http"
 )
 
@@ -33,13 +32,8 @@ func InitLogin(loginService service.LoginService, jwtService service.JWTService)
 // @Failure      500  {object}  map[string]string
 // @Router       /login [post]
 func (l *login) Login(ctx interface{}) {
+	ginCtx := CastContext(ctx)
 	var credentials dto.Credentials
-	ginCtx, ok := ctx.(*gin.Context)
-	if !ok {
-		log.Printf("unable to assert interface as *gin.Context, got %T", ctx)
-		return
-	}
-
 	err := ginCtx.ShouldBind(&credentials)
 	if err != nil {
 		ginCtx.JSON(http.StatusBadRequest, gin.H{"message": "invalid input"})
