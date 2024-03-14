@@ -1,21 +1,33 @@
 # Hexagonal-architecture
 ![build-workflow](https://github.com/Yinebeb-01/hexagonal-architecture/actions/workflows/build-and-test.yml/badge.svg)
 
-RESTful API built with Gin and GORM, demonstrating the principles of Hexagonal Architecture. 
-It manages video entities, allowing admins to create, and manage videos. 
+Hexagonal architecture is a design pattern suitable for building scalable and complex projects.
+This repository serves as a demonstration of the principles of Hexagonal Architecture in a Go project.
 
-Explore the concept of Hexagonal Architecture further in this blog post: 
-[Hexagonal-architecture](https://medium.com/@yinebeb-tariku/hexagonal-architecture-93a946776242).
+The goal of this project is to provide a straightforward example that developers can use to understand and apply
+Hexagonal Architecture in their own projects. By following the structure and patterns demonstrated here, developers
+can build scalable and maintainable systems with ease.
 
-**Installation**
+In this demo, the core business functionality revolves around managing user and video entities.
+Administrators have the capability to manage videos, while users are provided with access to view the available videos.
 
-Install **godog** binary:
-```bash
-go install github.com/cucumber/godog/cmd/godog@latest
-```
+Explore the concept of Hexagonal Architecture further
+in [Hexagonal-architecture](https://medium.com/@yinebeb-tariku/hexagonal-architecture-93a946776242).
 
-Use `go test` command to run feature tests since godog's cli is deprecated.
+## Adapters
 
+### Handler
+
+- [x] REST API - GIN
+- [ ] gRPC
+- [ ] GraphQL
+-  [ ] WebSocket
+
+### Repository
+
+- [x] Gorm/sqlite
+- [ ] Mongodb
+- [ ] Postgres
 
 ## Project structure
 
@@ -44,3 +56,13 @@ Use `go test` command to run feature tests since godog's cli is deprecated.
 |   |   |   |-- /test
 |   |   |-- /util   
 ```
+
+## Installation
+
+Install **godog** binary:
+
+```bash
+go install github.com/cucumber/godog/cmd/godog@latest
+```
+
+Use `go test` command to run feature tests since godog's cli is deprecated.

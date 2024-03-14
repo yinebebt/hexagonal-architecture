@@ -13,17 +13,22 @@ func InitVideoRoute(grp *gin.RouterGroup, video port.VideoHandler) {
 		{
 			Method:  http.MethodPost,
 			Path:    "/videos",
-			Handler: video.Save,
+			Handler: VideoHandlerFunc(video, "save"),
 		},
 		{
 			Method:  http.MethodDelete,
 			Path:    "/videos/:id",
-			Handler: video.Delete,
+			Handler: VideoHandlerFunc(video, "delete"),
 		},
 		{
 			Method:  http.MethodPut,
 			Path:    "/videos/:id",
-			Handler: video.Update,
+			Handler: VideoHandlerFunc(video, "update"),
+		},
+		{
+			Method:  http.MethodGet,
+			Handler: VideoHandlerFunc(video, "find_all"),
+			Path:    "/videos",
 		},
 		{
 			Method: http.MethodGet,
@@ -35,16 +40,26 @@ func InitVideoRoute(grp *gin.RouterGroup, video port.VideoHandler) {
 			},
 		},
 	}
-	viewRoutes := []glue.Router{
-		{
-			Method:  http.MethodGet,
-			Handler: video.ShowAll,
-			Path:    "/videos",
-		},
-	}
 
 	//apiRoute group used to group 'api/*' endpoints.
 	glue.RegisterRoutes(grp.Group(""), videoRoutes, []gin.HandlerFunc{middlewares2.AuthorizeJWT()})
-	//viewRoute Group will use to render static files
-	glue.RegisterRoutes(grp.Group("/view"), viewRoutes, []gin.HandlerFunc{})
+}
+
+// VideoHandlerFunc converts VideoHandler adapter to gin.HandlerFunc
+func VideoHandlerFunc(handler port.VideoHandler, action string) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		switch action {
+		case "save":
+			handler.Save(c)
+		case "find_all":
+			handler.FindAll(c)
+		case "update":
+			handler.Update(c)
+		case "delete":
+			handler.Delete(c)
+
+		default:
+			c.JSON(http.StatusBadRequest, gin.H{"message": "invalid action"})
+		}
+	}
 }
