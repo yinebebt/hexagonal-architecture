@@ -21,13 +21,13 @@ in [Hexagonal-architecture](https://medium.com/@yinebeb-tariku/hexagonal-archite
 - [x] REST API - GIN
 - [ ] gRPC
 - [ ] GraphQL
--  [ ] WebSocket
+- [ ] WebSocket
 
 ### Repository
 
-- [x] Gorm/sqlite
+- [x] Sqlite
 - [ ] Mongodb
-- [ ] Postgres
+- [x] Postgres
 
 ## Project structure
 
@@ -42,7 +42,8 @@ in [Hexagonal-architecture](https://medium.com/@yinebeb-tariku/hexagonal-archite
 |   |   |   |-- /rest
 |   |   |   |-- /gRPC
 |   |   |-- /reository
-|   |   |   |-- /gorm
+|   |   |   |-- /sqlite
+|   |   |   |-- /postgres
 |   |   |   |-- /mongo
 |   |   |-- /glue
 |   |   |   |-- /route

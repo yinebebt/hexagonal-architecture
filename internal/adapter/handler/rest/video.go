@@ -2,14 +2,15 @@ package rest
 
 import (
 	"errors"
+	"net/http"
+	"strconv"
+
 	"github.com/Yinebeb-01/hexagonalarch/internal/core/entity"
 	"github.com/Yinebeb-01/hexagonalarch/internal/core/port"
 	"github.com/Yinebeb-01/hexagonalarch/internal/core/service"
 	"github.com/Yinebeb-01/hexagonalarch/internal/core/util"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
-	"net/http"
-	"strconv"
 )
 
 type video struct {
@@ -71,7 +72,11 @@ func (v *video) Save(ctx interface{}) {
 // @Router       /videos [get]
 func (v *video) FindAll(ctx interface{}) {
 	ginCtx := CastContext(ctx)
-	res := v.videoService.FindAll()
+	res, err := v.videoService.FindAll()
+	if err != nil {
+		ginCtx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 	ginCtx.JSON(http.StatusOK, res)
 }
 
@@ -89,7 +94,11 @@ func (v *video) FindAll(ctx interface{}) {
 // Deprecated: ShowAll is deprecated, use FindAll instead
 func (v *video) ShowAll(ctx interface{}) {
 	ginCtx := CastContext(ctx)
-	videos := v.videoService.FindAll()
+	videos, err := v.videoService.FindAll()
+	if err != nil {
+		ginCtx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 	data := gin.H{
 		"title":  "Video Page",
 		"videos": videos,
@@ -120,7 +129,6 @@ func (v *video) Delete(ctx interface{}) {
 	video.ID = id
 	v.videoService.Delete(video)
 	ginCtx.JSON(http.StatusOK, gin.H{"message": "video deleted successfully!"})
-	return
 }
 
 // Update
