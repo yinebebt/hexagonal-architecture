@@ -3,10 +3,13 @@ package test
 import (
 	"context"
 	"errors"
-	"github.com/Yinebeb-01/hexagonalarch/internal/adapter/repository/gorm"
-	"github.com/Yinebeb-01/hexagonalarch/internal/core/entity"
-	"github.com/Yinebeb-01/hexagonalarch/internal/core/service"
+	"flag"
 	"testing"
+
+	"github.com/Yinebeb-01/hexagonalarch/internal/adapter/repository"
+	"github.com/Yinebeb-01/hexagonalarch/internal/core/entity"
+	"github.com/Yinebeb-01/hexagonalarch/internal/core/port"
+	"github.com/Yinebeb-01/hexagonalarch/internal/core/service"
 
 	"github.com/cucumber/godog"
 	"github.com/stretchr/testify/assert"
@@ -19,9 +22,14 @@ const (
 )
 
 var (
-	videoRepository = gorm.NewVideoRepository()
-	videoSer        = service.New(videoRepository)
-	video           = entity.Video{}
+	dbType = flag.String("dbtype", "sqlite", "Type of the database (sqliteor postgres)")
+	dsn    = flag.String("dsn", "test.db", "Data source name for the database")
+)
+
+var (
+	videoRepository port.VideoRepository
+	videoSer        service.VideoService
+	video           entity.Video
 	t               *testing.T
 )
 
@@ -50,7 +58,11 @@ func adminRunFindAllMethod() error {
 }
 
 func videoShouldBeVideo() error {
-	videoRes := videoSer.FindAll()[0]
+	videos, err := videoSer.FindAll()
+	if err != nil {
+		return err
+	}
+	videoRes := videos[0]
 	if videoRes.Title == video.Title && videoRes.Description == video.Description {
 		return nil
 	} else {
@@ -59,7 +71,10 @@ func videoShouldBeVideo() error {
 }
 
 func videoShouldBeNull() error {
-	videos := videoSer.FindAll()
+	videos, err := videoSer.FindAll()
+	if err != nil {
+		return nil
+	}
 	if assert.Empty(t, videos, "should be empty") {
 		return nil
 	} else {
@@ -68,11 +83,11 @@ func videoShouldBeNull() error {
 }
 
 func InitializeScenario(ctx *godog.ScenarioContext) {
+
 	ctx.Before(func(ctx context.Context, sc *godog.Scenario) (context.Context, error) {
-		videoRepository = gorm.NewVideoRepository()
+		videoRepository = repository.NewVideoRepository(*dbType, *dsn)
 		videoSer = service.New(videoRepository)
 		video = entity.Video{}
-
 		return ctx, nil
 	})
 
@@ -82,9 +97,9 @@ func InitializeScenario(ctx *godog.ScenarioContext) {
 	ctx.Step(`^video should be video$`, videoShouldBeVideo)
 	ctx.Step(`^video should be null$`, videoShouldBeNull)
 
-	ctx.After(func(ctx context.Context, sc *godog.Scenario, err error) (context.Context, error) {
-		videoRepository.Delete(video)
-		return ctx, nil
+	ctx.After(func(ctx context.Context, sc *godog.Scenario, _ error) (context.Context, error) {
+		err := videoRepository.Clean()
+		return ctx, err
 	})
 }
 
@@ -104,18 +119,20 @@ func TestFeatures(t *testing.T) {
 }
 
 func TestFindAll(t *testing.T) {
-	video := gorm.NewVideoRepository()
+	video := repository.NewVideoRepository(*dbType, *dsn)
 	service := service.New(video)
 
-	service.Save(getVideo())
+	_, err := service.Save(getVideo())
+	assert.Nil(t, err)
 
-	videos := service.FindAll()
+	videos, err := service.FindAll()
 
 	firstVideo := videos[0]
 	assert.NotNil(t, videos)
 	assert.Equal(t, TITLE, firstVideo.Title)
 	assert.Equal(t, DESCRIPTION, firstVideo.Description)
 	assert.Equal(t, URL, firstVideo.URL)
+	assert.Nil(t, err)
 
 	video.Delete(firstVideo)
 }

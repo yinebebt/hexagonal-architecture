@@ -1,15 +1,17 @@
 package main
 
 import (
+	"flag"
+	"io"
+	"log"
+	"os"
+
 	"github.com/Yinebeb-01/hexagonalarch/docs"
 	"github.com/Yinebeb-01/hexagonalarch/internal/adapter/glue/route"
 	"github.com/Yinebeb-01/hexagonalarch/internal/adapter/handler/middleware"
 	"github.com/Yinebeb-01/hexagonalarch/internal/adapter/handler/rest"
-	"github.com/Yinebeb-01/hexagonalarch/internal/adapter/repository/gorm"
+	"github.com/Yinebeb-01/hexagonalarch/internal/adapter/repository"
 	"github.com/Yinebeb-01/hexagonalarch/internal/core/service"
-	"io"
-	"log"
-	"os"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -18,13 +20,8 @@ import (
 )
 
 var (
-	videoRepository = gorm.NewVideoRepository()
-	loginService    = service.NewLoginService()
-	jwtService      = service.NewJWTService()
-
-	videoService = service.New(videoRepository)
-	videoHandler = rest.InitVideo(videoService)
-	loginHandler = rest.InitLogin(loginService, jwtService)
+	dbType = flag.String("dbtype", "sqlite", "Type of the database (sqliteor postgres)")
+	dsn    = flag.String("dsn", "test.db", "Data source name for the database")
 )
 
 // @title hexagonal-architecture
@@ -35,6 +32,16 @@ var (
 // @host localhost
 // @BasePath  /v1
 func main() {
+	flag.Parse()
+
+	videoRepository := repository.NewVideoRepository(*dbType, *dsn)
+	loginService := service.NewLoginService()
+	jwtService := service.NewJWTService()
+
+	videoService := service.New(videoRepository)
+	videoHandler := rest.InitVideo(videoService)
+	loginHandler := rest.InitLogin(loginService, jwtService)
+
 	configOutput()
 
 	router := gin.New()
