@@ -2,16 +2,16 @@ package main
 
 import (
 	"flag"
-	"github.com/Yinebeb-01/hexagonalarch/internal/adapter/glue/middleware"
+	"github.com/yinebebt/hexagonal-architecture/internal/adapter/glue/middleware"
 	"io"
 	"log"
 	"os"
 
-	"github.com/Yinebeb-01/hexagonalarch/docs"
-	"github.com/Yinebeb-01/hexagonalarch/internal/adapter/glue/route"
-	"github.com/Yinebeb-01/hexagonalarch/internal/adapter/handler/rest"
-	"github.com/Yinebeb-01/hexagonalarch/internal/adapter/repository"
-	"github.com/Yinebeb-01/hexagonalarch/internal/core/service"
+	"github.com/yinebebt/hexagonal-architecture/docs"
+	"github.com/yinebebt/hexagonal-architecture/internal/adapter/glue/route"
+	"github.com/yinebebt/hexagonal-architecture/internal/adapter/handler/rest"
+	"github.com/yinebebt/hexagonal-architecture/internal/adapter/repository"
+	"github.com/yinebebt/hexagonal-architecture/internal/core/service"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"

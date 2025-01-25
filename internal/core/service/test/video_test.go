@@ -6,10 +6,10 @@ import (
 	"flag"
 	"testing"
 
-	"github.com/Yinebeb-01/hexagonalarch/internal/adapter/repository"
-	"github.com/Yinebeb-01/hexagonalarch/internal/core/entity"
-	"github.com/Yinebeb-01/hexagonalarch/internal/core/port"
-	"github.com/Yinebeb-01/hexagonalarch/internal/core/service"
+	"github.com/yinebebt/hexagonal-architecture/internal/adapter/repository"
+	"github.com/yinebebt/hexagonal-architecture/internal/core/entity"
+	"github.com/yinebebt/hexagonal-architecture/internal/core/port"
+	"github.com/yinebebt/hexagonal-architecture/internal/core/service"
 
 	"github.com/cucumber/godog"
 	"github.com/stretchr/testify/assert"

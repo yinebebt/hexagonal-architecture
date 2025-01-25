@@ -1,6 +1,6 @@
 package port
 
-import "github.com/Yinebeb-01/hexagonalarch/internal/core/entity"
+import "github.com/yinebebt/hexagonal-architecture/internal/core/entity"
 
 type VideoRepository interface {
 	Save(entity.Video) error

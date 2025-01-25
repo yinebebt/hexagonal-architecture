@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/Yinebeb-01/hexagonalarch/internal/core/entity"
-	"github.com/Yinebeb-01/hexagonalarch/internal/core/port"
-	"github.com/Yinebeb-01/hexagonalarch/internal/core/service"
 	"github.com/gin-gonic/gin"
+	"github.com/yinebebt/hexagonal-architecture/internal/core/entity"
+	"github.com/yinebebt/hexagonal-architecture/internal/core/port"
+	"github.com/yinebebt/hexagonal-architecture/internal/core/service"
 )
 
 type video struct {

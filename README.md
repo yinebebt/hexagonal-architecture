@@ -1,5 +1,5 @@
 # Hexagonal-architecture
-![build-workflow](https://github.com/Yinebeb-01/hexagonal-architecture/actions/workflows/build-and-test.yml/badge.svg)
+![build-workflow](https://github.com/yinebebt/hexagonal-architecture/actions/workflows/build-and-test.yml/badge.svg)
 
 Hexagonal architecture is a design pattern suitable for building scalable and complex projects.
 This repository serves as a demonstration of the principles of Hexagonal Architecture in a Go project.

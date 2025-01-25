@@ -4,8 +4,8 @@ package sqlite
 import (
 	"fmt"
 
-	"github.com/Yinebeb-01/hexagonalarch/internal/core/entity"
-	"github.com/Yinebeb-01/hexagonalarch/internal/core/port"
+	"github.com/yinebebt/hexagonal-architecture/internal/core/entity"
+	"github.com/yinebebt/hexagonal-architecture/internal/core/port"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )

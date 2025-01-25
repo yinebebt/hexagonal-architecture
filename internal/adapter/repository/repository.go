@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/Yinebeb-01/hexagonalarch/internal/adapter/repository/postgres"
-	"github.com/Yinebeb-01/hexagonalarch/internal/adapter/repository/sqlite"
-	"github.com/Yinebeb-01/hexagonalarch/internal/core/port"
+	"github.com/yinebebt/hexagonal-architecture/internal/adapter/repository/postgres"
+	"github.com/yinebebt/hexagonal-architecture/internal/adapter/repository/sqlite"
+	"github.com/yinebebt/hexagonal-architecture/internal/core/port"
 )
 
 func NewVideoRepository(dbType, dsn string) port.VideoRepository {
