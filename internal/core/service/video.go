@@ -8,7 +8,7 @@ import (
 type VideoService interface {
 	Save(entity.Video) (entity.Video, error)
 	Update(entity.Video) entity.Video
-	Delete(entity.Video)
+	Delete(id int64) error
 	FindAll() ([]entity.Video, error)
 }
 
@@ -27,14 +27,13 @@ func (v *video) Save(video entity.Video) (entity.Video, error) {
 	return video, err
 }
 
-// fixme: return from result
 func (v *video) Update(video entity.Video) entity.Video {
 	v.videoRepository.Update(video)
 	return video
 }
 
-func (v *video) Delete(video entity.Video) {
-	v.videoRepository.Delete(video)
+func (v *video) Delete(id int64) error {
+	return v.videoRepository.Delete(id)
 }
 
 func (v *video) FindAll() ([]entity.Video, error) {

@@ -11,10 +11,10 @@ type Person struct {
 }
 
 type Video struct {
-	ID          uint64    `gorm:"primary_key;auto_increment" json:"idd"`
+	ID          int64     `gorm:"primary_key;auto_increment" json:"id"`
 	Title       string    `json:"title" binding:"min=3,max=10" validate:"is-cool" gorm:"type:varchar(10)"`
 	Description string    `json:"description" binding:"max=25" gorm:"type:varchar(25)"`
-	URL         string    `json:"url" binding:"required,url" gorm:"type:varchar(256); UNIQUE"`
+	URL         string    `json:"url" binding:"required,url" gorm:"type:varchar(256); UNIQUE" example:"https://google.com/xyz-video"`
 	Director    Person    `json:"author" binding:"required" gorm:"foreignkey:PersonID"`
 	PersonID    uint64    `json:"-"`
 	CreatedAt   time.Time `json:"-" gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`

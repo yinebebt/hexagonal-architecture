@@ -10,8 +10,8 @@ const docTemplate = `{
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
         "contact": {
-            "name": "yinebe-tariku",
-            "url": "https://www.linkedin.com/yinebeb-tariku",
+            "name": "Yinebe T.",
+            "url": "www.linkedin.com/in/yinebeb-tariku",
             "email": "yintar5@gmail.com"
         },
         "version": "{{.Version}}"
@@ -19,106 +19,6 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/all-videos": {
-            "get": {
-                "description": "Show all video description",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Video"
-                ],
-                "summary": "ShowAll video",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/entity.Video"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/login": {
-            "post": {
-                "description": "login user description",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "Login user",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/videos": {
             "get": {
                 "description": "FindAll video description",
@@ -228,6 +128,17 @@ const docTemplate = `{
                     "Video"
                 ],
                 "summary": "Save video",
+                "parameters": [
+                    {
+                        "description": "video to save",
+                        "name": "video",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.Video"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -263,7 +174,9 @@ const docTemplate = `{
                         }
                     }
                 }
-            },
+            }
+        },
+        "/videos/:id": {
             "delete": {
                 "description": "Delete video description",
                 "consumes": [
@@ -356,7 +269,7 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 25
                 },
-                "idd": {
+                "id": {
                     "type": "integer"
                 },
                 "title": {
@@ -365,7 +278,8 @@ const docTemplate = `{
                     "minLength": 3
                 },
                 "url": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "https://google.com/xyz-video"
                 }
             }
         }

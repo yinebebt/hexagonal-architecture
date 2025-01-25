@@ -120,12 +120,12 @@ func TestFeatures(t *testing.T) {
 
 func TestFindAll(t *testing.T) {
 	video := repository.NewVideoRepository(*dbType, *dsn)
-	service := service.New(video)
+	srv := service.New(video)
 
-	_, err := service.Save(getVideo())
+	_, err := srv.Save(getVideo())
 	assert.Nil(t, err)
 
-	videos, err := service.FindAll()
+	videos, err := srv.FindAll()
 
 	firstVideo := videos[0]
 	assert.NotNil(t, videos)
@@ -134,7 +134,10 @@ func TestFindAll(t *testing.T) {
 	assert.Equal(t, URL, firstVideo.URL)
 	assert.Nil(t, err)
 
-	video.Delete(firstVideo)
+	err = video.Delete(firstVideo.ID)
+	if err != nil {
+		assert.Nil(t, err)
+	}
 }
 
 func getVideo() entity.Video {

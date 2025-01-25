@@ -2,7 +2,6 @@ package route
 
 import (
 	"github.com/Yinebeb-01/hexagonalarch/internal/adapter/glue"
-	middlewares2 "github.com/Yinebeb-01/hexagonalarch/internal/adapter/handler/middleware"
 	"github.com/Yinebeb-01/hexagonalarch/internal/core/port"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -42,7 +41,7 @@ func InitVideoRoute(grp *gin.RouterGroup, video port.VideoHandler) {
 	}
 
 	//apiRoute group used to group 'api/*' endpoints.
-	glue.RegisterRoutes(grp.Group(""), videoRoutes, []gin.HandlerFunc{middlewares2.AuthorizeJWT()})
+	glue.RegisterRoutes(grp.Group(""), videoRoutes)
 }
 
 // VideoHandlerFunc converts VideoHandler adapter to gin.HandlerFunc

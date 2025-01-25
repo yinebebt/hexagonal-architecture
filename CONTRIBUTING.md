@@ -11,7 +11,7 @@ To contribute to this project, follow these steps:
 1. Fork and clone the repository on GitHub.
 2. Create a new branch for your changes.
 3. Make your changes and commit them to your branch:
-4. Push your changes.and open a pull request with a clear title and description of your changes.
+4. Push your changes and open a pull request with a clear title and description.
 
 ## Guidelines
 
@@ -19,7 +19,7 @@ To contribute to this project, follow these steps:
 
 - Follow the existing code style and conventions.
 - Write clear and concise code with meaningful comments when necessary.
-- Run `gofmt` or `go fmt` to format your code before committing.
+- Run `go fmt ./...` to format your code before committing.
 
 ### Testing
 

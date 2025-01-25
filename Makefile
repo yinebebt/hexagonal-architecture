@@ -1,5 +1,5 @@
 swag:
-	swag init -g cmd/main.go
+	swag fmt ./... && swag init -g cmd/main.go
 
 test:
 	go test ./...

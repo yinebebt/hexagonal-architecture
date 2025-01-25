@@ -1,4 +1,6 @@
-// Package postgres is postgres implementation of video reository, it uses pgx
+// Package postgres is postgres implementation of port.VideoRepository.
+// It uses pgx postgres driver.
+
 package postgres
 
 import (
@@ -10,7 +12,7 @@ import (
 	"github.com/jackc/pgx/v4"
 )
 
-type Database struct {
+type database struct {
 	conn *pgx.Conn
 }
 
@@ -35,24 +37,24 @@ func NewVideoRepository(dsn string) port.VideoRepository {
 		log.Fatalf("Failed to create schema: %v\n", err)
 	}
 
-	return &Database{
+	return &database{
 		conn: conn,
 	}
 }
 
-func (db *Database) Save(video entity.Video) error {
+func (db *database) Save(video entity.Video) error {
 	_, err := db.conn.Exec(context.Background(), "INSERT INTO videos (title, description,url) VALUES ($1, $2,$3)",
 		video.Title, video.Description, video.URL)
 	return err
 }
 
-func (db *Database) Update(video entity.Video) error {
+func (db *database) Update(video entity.Video) error {
 	_, err := db.conn.Exec(context.Background(), "UPDATE videos SET title = $1, description = $2 WHERE id = $3",
 		video.Title, video.Description, video.ID)
 	return err
 }
 
-func (db *Database) FindAll() ([]entity.Video, error) {
+func (db *database) FindAll() ([]entity.Video, error) {
 	rows, err := db.conn.Query(context.Background(), "SELECT id, title, description,url FROM videos")
 	if err != nil {
 		return nil, err
@@ -74,12 +76,12 @@ func (db *Database) FindAll() ([]entity.Video, error) {
 	return videos, nil
 }
 
-func (db *Database) Delete(video entity.Video) error {
-	_, err := db.conn.Exec(context.Background(), "DELETE FROM videos WHERE id = $1", video.ID)
+func (db *database) Delete(id int64) error {
+	_, err := db.conn.Exec(context.Background(), "DELETE FROM videos WHERE id = $1", id)
 	return err
 }
 
-func (db *Database) Clean() error {
+func (db *database) Clean() error {
 	_, err := db.conn.Exec(context.Background(), "drop table if exists videos")
 	return err
 }

@@ -1,4 +1,3 @@
-// internal/adapter/repository/factory.go
 package repository
 
 import (
