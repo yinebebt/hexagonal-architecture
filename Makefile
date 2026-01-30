@@ -2,7 +2,7 @@ swag:
 	swag fmt ./... && swag init -g cmd/main.go
 
 test:
-	go test ./...
+	go test -v -race ./...
 
 run:
 	go run ./cmd/main.go

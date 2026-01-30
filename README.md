@@ -1,4 +1,5 @@
 # Hexagonal-architecture
+
 ![build-workflow](https://github.com/yinebebt/hexagonal-architecture/actions/workflows/build-and-test.yml/badge.svg)
 
 Hexagonal architecture is a design pattern suitable for building scalable and complex projects.
@@ -20,50 +21,82 @@ in [Hexagonal-architecture](https://medium.com/@yinebeb-tariku/hexagonal-archite
 
 - [x] REST API - GIN
 - [ ] gRPC
-- [ ] GraphQL
 - [ ] WebSocket
+- [ ] GraphQL
 
 ### Repository
 
 - [x] Sqlite
-- [ ] Mongodb
 - [x] Postgres
 
-## Project structure
+## Project Structure
 
+```txt
+hexagonal-architecture/
+├── cmd/
+│   └── main.go                 # Application entry point
+├── docs/                       # Swagger documentation
+├── internal/
+│   ├── adapter/                # External adapters (driving & driven)
+│   │   ├── repository/         # Repository adapters (driven/outbound)
+│   │   │   ├── sqlite/        # SQLite implementation
+│   │   │   └── postgres/      # PostgreSQL implementation
+│   │   ├── rest/               # REST adapter (driving/inbound)
+│   │   │   ├── handler.go     # Handler implementation & routes
+│   │   │   └── middleware.go  # HTTP middleware
+│   │   └── templates/          # HTML templates
+│   └── core/                   # Business logic (hexagon)
+│       ├── entity/             # Domain entities
+│       ├── port/                # Ports (interfaces)
+│       │   ├── handler.go      # port.VideoHandler interface
+│       │   └── repository.go   # port.VideoRepository interface
+│       └── service/            # Business services
+├── go.mod
+├── go.sum
+└── README.md
 ```
-/app
-|-- /cmd
-|   |-- main.go
-|-- /docs   
-|-- /internal
-|   |-- /adapter
-|   |   |-- /handler
-|   |   |   |-- /rest
-|   |   |   |-- /gRPC
-|   |   |-- /reository
-|   |   |   |-- /sqlite
-|   |   |   |-- /postgres
-|   |   |   |-- /mongo
-|   |   |-- /glue
-|   |   |   |-- /route
-|   |   |   |-- route.go
-|   |   |-- /dto
-|   |   |-- /templates
-|   |-- /core
-|   |   |-- /entity
-|   |   |-- /port
-|   |   |-- /service
-|   |   |   |-- /test
-|   |   |-- /util   
-```
+
+## Architecture Principles
+
+- **Core (Domain)**: Contains business logic, entities, and ports (interfaces)
+- **Adapters**: Implement ports for external concerns (HTTP, databases)
+- **Dependency Inversion**: Core depends on abstractions (ports), not implementations
+- **Clean Separation**: Business logic is independent of frameworks and databases
 
 ## Installation
 
-Install **godog** binary:
-
 ```bash
-go install github.com/cucumber/godog/cmd/godog@latest
+# Clone the repository
+git clone https://github.com/yinebebt/hexagonal-architecture.git
+cd hexagonal-architecture
+
+# Install dependencies
+go mod download
+
+# Build the application
+go build ./cmd/main.go
+
+# Run tests
+go test ./...
 ```
 
-Use `go test` command to run feature tests since godog's cli is deprecated.
+## Running the Application
+
+```bash
+# Using SQLite (default)
+go run ./cmd/main.go -dbtype=sqlite -dsn=app.db
+
+# Using PostgreSQL
+go run ./cmd/main.go -dbtype=postgres -dsn="postgres://user:password@localhost/dbname"
+
+# Set custom port
+PORT=8080 go run ./cmd/main.go
+```
+
+## Testing
+
+Run all tests:
+
+```bash
+go test -v -race ./...
+```

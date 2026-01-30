@@ -1,5 +1,34 @@
-/test.db
-services/test.db
-.idea/*
-/godog_dependency_file_test.go
-/app.log
+# Database files
+*.db
+test.db
+**/test.db
+
+# Log files
+*.log
+app.log
+
+# Test artifacts
+*.test
+*.out
+coverage.out
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Build artifacts
+/app
+/app.exe
+/bin/
+/dist/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp

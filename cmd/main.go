@@ -1,16 +1,20 @@
 package main
 
 import (
+	"context"
 	"flag"
-	"github.com/yinebebt/hexagonal-architecture/internal/adapter/glue/middleware"
+	"fmt"
 	"io"
 	"log"
+	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/yinebebt/hexagonal-architecture/docs"
-	"github.com/yinebebt/hexagonal-architecture/internal/adapter/glue/route"
-	"github.com/yinebebt/hexagonal-architecture/internal/adapter/handler/rest"
 	"github.com/yinebebt/hexagonal-architecture/internal/adapter/repository"
+	"github.com/yinebebt/hexagonal-architecture/internal/adapter/rest"
 	"github.com/yinebebt/hexagonal-architecture/internal/core/service"
 
 	"github.com/gin-gonic/gin"
@@ -33,15 +37,32 @@ var (
 func main() {
 	flag.Parse()
 
-	videoRepository := repository.NewVideoRepository(*dbType, *dsn)
+	videoRepository, err := repository.NewVideoRepository(*dbType, *dsn)
+	if err != nil {
+		log.Fatalf("Failed to initialize repository: %v", err)
+	}
+	defer func() {
+		if err := videoRepository.Close(); err != nil {
+			log.Printf("Error closing repository: %v", err)
+		}
+	}()
 
 	videoService := service.New(videoRepository)
-	videoHandler := rest.InitVideo(videoService)
+	videoHandler := rest.NewVideoHandler(videoService)
 
-	configOutput()
+	logWriter, err := configOutput()
+	if err != nil {
+		log.Printf("Warning: failed to setup log file: %v", err)
+	} else if logWriter != nil {
+		defer func() {
+			if err := logWriter.Close(); err != nil {
+				log.Printf("Error closing log file: %v", err)
+			}
+		}()
+	}
 
 	router := gin.New()
-	router.Use(gin.Recovery(), middleware.Logger())
+	router.Use(gin.Recovery(), rest.Logger())
 	router.Static("/css", "./internal/adapter/templates/css")
 	router.LoadHTMLGlob("./internal/adapter/templates/*.html")
 
@@ -51,22 +72,50 @@ func main() {
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 	v1.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	route.InitVideoRoute(v1, videoHandler)
-
-	log.Println("router initialized")
+	rest.RegisterVideoRoutes(v1, videoHandler)
 
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
-	router.Run(":" + port)
+
+	srv := &http.Server{
+		Addr:    ":" + port,
+		Handler: router,
+	}
+
+	// Start server in a goroutine
+	go func() {
+		log.Printf("Server starting on port %s", port)
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Fatalf("Failed to start server: %v", err)
+		}
+	}()
+
+	// Wait for interrupt signal to gracefully shutdown the server
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+	log.Println("Shutting down server...")
+
+	// Give outstanding requests a deadline for completion
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	if err := srv.Shutdown(ctx); err != nil {
+		log.Fatalf("Server forced to shutdown: %v", err)
+	}
+
+	log.Println("Server exited")
 }
 
-// configOutput create a custom logger file to see debugging outputs.
-func configOutput() {
+// configOutput creates a custom logger file to see debugging outputs.
+// Returns the file writer so it can be closed properly.
+func configOutput() (io.Closer, error) {
 	writer, err := os.Create("app.log")
 	if err != nil {
-		log.Println("unable to create log file")
+		return nil, fmt.Errorf("unable to create log file: %w", err)
 	}
 	gin.DefaultWriter = io.MultiWriter(os.Stdout, writer)
+	return writer, nil
 }

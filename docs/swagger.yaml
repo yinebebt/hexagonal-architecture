@@ -60,18 +60,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/entity.Video'
-        "400":
-          description: Bad Request
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "404":
-          description: Not Found
-          schema:
-            additionalProperties:
-              type: string
-            type: object
         "500":
           description: Internal Server Error
           schema:
@@ -105,12 +93,6 @@ paths:
             additionalProperties:
               type: string
             type: object
-        "404":
-          description: Not Found
-          schema:
-            additionalProperties:
-              type: string
-            type: object
         "500":
           description: Internal Server Error
           schema:
@@ -118,38 +100,6 @@ paths:
               type: string
             type: object
       summary: Save video
-      tags:
-      - Video
-    put:
-      consumes:
-      - application/json
-      description: Update video description
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/entity.Video'
-        "400":
-          description: Bad Request
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "404":
-          description: Not Found
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "500":
-          description: Internal Server Error
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: Update video
       tags:
       - Video
   /videos/:id:
@@ -163,15 +113,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/entity.Video'
-        "400":
-          description: Bad Request
-          schema:
             additionalProperties:
               type: string
             type: object
-        "404":
-          description: Not Found
+        "400":
+          description: Bad Request
           schema:
             additionalProperties:
               type: string
@@ -183,6 +129,38 @@ paths:
               type: string
             type: object
       summary: Delete video
+      tags:
+      - Video
+    put:
+      consumes:
+      - application/json
+      description: Update video description
+      parameters:
+      - description: Video ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Video'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update video
       tags:
       - Video
 swagger: "2.0"

@@ -1,4 +1,4 @@
-package middleware
+package rest
 
 import (
 	"fmt"
@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Logger returns a Gin middleware handler for HTTP request logging
 func Logger() gin.HandlerFunc {
 	return gin.LoggerWithFormatter(func(params gin.LogFormatterParams) string {
 		return fmt.Sprintf("%s [%s] |%s| %d %s `%s`",
