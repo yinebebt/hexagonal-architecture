@@ -1,8 +1,9 @@
 # Contributing
+
 We welcome contributions from Gophers. By participating in this project, you agree to abide by the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 When contributing to this repository, please first discuss the change you wish to make via issue,
-email, or any other method with the owners of this repository before making a change. 
+email, or any other method with the owners of this repository before making a change.
 
 ## Getting Started
 
