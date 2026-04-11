@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"github.com/yinebebt/hexagonal-architecture/docs"
+	gqlhandler "github.com/yinebebt/hexagonal-architecture/internal/adapter/graphql"
 	"github.com/yinebebt/hexagonal-architecture/internal/adapter/repository"
 	"github.com/yinebebt/hexagonal-architecture/internal/adapter/rest"
 	"github.com/yinebebt/hexagonal-architecture/internal/core/service"
@@ -73,6 +74,13 @@ func main() {
 	v1.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	rest.RegisterVideoRoutes(v1, videoHandler)
+
+	// GraphQL adapter — serves playground at /v1/graphql
+	graphqlHandler, err := gqlhandler.NewHandler(videoService)
+	if err != nil {
+		log.Fatalf("Failed to initialize GraphQL handler: %v", err)
+	}
+	v1.Any("/graphql", gin.WrapH(graphqlHandler))
 
 	port := os.Getenv("PORT")
 	if port == "" {
