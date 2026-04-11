@@ -1,14 +1,19 @@
 package port
 
-import "github.com/yinebebt/hexagonal-architecture/internal/core/entity"
+import (
+	"context"
+
+	"github.com/yinebebt/hexagonal-architecture/internal/core/entity"
+)
 
 type VideoRepository interface {
-	Save(*entity.Video) error
-	Update(*entity.Video) error
-	Delete(id int64) error
-	FindAll() ([]entity.Video, error)
+	Save(ctx context.Context, video *entity.Video) error
+	Update(ctx context.Context, video *entity.Video) error
+	Delete(ctx context.Context, id int64) error
+	FindByID(ctx context.Context, id int64) (entity.Video, error)
+	FindAll(ctx context.Context) ([]entity.Video, error)
 	// Clean removes all data from the database. This method is intended for testing only.
-	Clean() error
+	Clean(ctx context.Context) error
 	// Close closes the database connection and releases any resources.
 	Close() error
 }

@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"flag"
 	"testing"
 
@@ -8,6 +9,7 @@ import (
 	"github.com/yinebebt/hexagonal-architecture/internal/core/entity"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 const (
@@ -23,17 +25,18 @@ var (
 
 // TestFindAll_WhenNoVideo tests the scenario when there are no videos in the database
 func TestFindAll_WhenNoVideo(t *testing.T) {
+	ctx := context.Background()
 	videoRepository, err := repository.NewVideoRepository(*dbType, *dsn)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	videoSer := New(videoRepository)
 
 	// Clean up before test
 	defer func() {
-		_ = videoRepository.Clean()
+		_ = videoRepository.Clean(ctx)
 	}()
 
 	// When: admin runs FindAll method
-	videos, err := videoSer.FindAll()
+	videos, err := videoSer.FindAll(ctx)
 
 	// Then: video should be null/empty
 	assert.Nil(t, err)
@@ -42,13 +45,14 @@ func TestFindAll_WhenNoVideo(t *testing.T) {
 
 // TestFindAll_WhenVideoExists tests the scenario when there is a video in the database
 func TestFindAll_WhenVideoExists(t *testing.T) {
+	ctx := context.Background()
 	videoRepository, err := repository.NewVideoRepository(*dbType, *dsn)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	videoSer := New(videoRepository)
 
 	// Clean up after test
 	defer func() {
-		_ = videoRepository.Clean()
+		_ = videoRepository.Clean(ctx)
 	}()
 
 	// Given: Admin posts some video
@@ -63,11 +67,11 @@ func TestFindAll_WhenVideoExists(t *testing.T) {
 			Email:     "abel@gmail.com",
 		},
 	}
-	_, err = videoSer.Save(video)
+	_, err = videoSer.Save(ctx, video)
 	assert.Nil(t, err)
 
 	// When: admin runs FindAll method
-	videos, err := videoSer.FindAll()
+	videos, err := videoSer.FindAll(ctx)
 
 	// Then: video should be returned
 	assert.Nil(t, err)
@@ -81,18 +85,19 @@ func TestFindAll_WhenVideoExists(t *testing.T) {
 }
 
 func TestFindAll(t *testing.T) {
+	ctx := context.Background()
 	videoRepo, err := repository.NewVideoRepository(*dbType, *dsn)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	defer func() {
-		_ = videoRepo.Clean()
+		_ = videoRepo.Clean(ctx)
 	}()
 
 	srv := New(videoRepo)
 
-	_, err = srv.Save(getVideo())
+	_, err = srv.Save(ctx, getVideo())
 	assert.NoError(t, err)
 
-	videos, err := srv.FindAll()
+	videos, err := srv.FindAll(ctx)
 	assert.NoError(t, err)
 	assert.NotEmpty(t, videos)
 
@@ -101,38 +106,68 @@ func TestFindAll(t *testing.T) {
 	assert.Equal(t, DESCRIPTION, firstVideo.Description)
 	assert.Equal(t, URL, firstVideo.URL)
 
-	err = videoRepo.Delete(firstVideo.ID)
+	err = videoRepo.Delete(ctx, firstVideo.ID)
 	assert.NoError(t, err)
 }
 
-func TestUpdate(t *testing.T) {
+func TestFindByID(t *testing.T) {
+	ctx := context.Background()
 	videoRepo, err := repository.NewVideoRepository(*dbType, *dsn)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	defer func() {
-		_ = videoRepo.Clean()
+		_ = videoRepo.Clean(ctx)
+	}()
+
+	srv := New(videoRepo)
+
+	// Save a video first
+	savedVideo, err := srv.Save(ctx, getVideo())
+	require.NoError(t, err)
+
+	// Find the video by ID
+	found, err := srv.FindByID(ctx, savedVideo.ID)
+	assert.NoError(t, err)
+	assert.Equal(t, savedVideo.ID, found.ID)
+	assert.Equal(t, TITLE, found.Title)
+	assert.Equal(t, DESCRIPTION, found.Description)
+	assert.Equal(t, URL, found.URL)
+
+	// Try to find a non-existent video
+	_, err = srv.FindByID(ctx, 99999)
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "not found")
+}
+
+func TestUpdate(t *testing.T) {
+	ctx := context.Background()
+	videoRepo, err := repository.NewVideoRepository(*dbType, *dsn)
+	require.NoError(t, err)
+	defer func() {
+		_ = videoRepo.Clean(ctx)
 	}()
 
 	srv := New(videoRepo)
 
 	// Save a video first
 	video := getVideo()
-	savedVideo, err := srv.Save(video)
+	savedVideo, err := srv.Save(ctx, video)
 	assert.NoError(t, err)
 
 	// Update the video
 	savedVideo.Title = "Updated Title"
 	savedVideo.Description = "Updated Description"
-	updatedVideo, err := srv.Update(savedVideo)
+	updatedVideo, err := srv.Update(ctx, savedVideo)
 	assert.NoError(t, err)
 	assert.Equal(t, "Updated Title", updatedVideo.Title)
 	assert.Equal(t, "Updated Description", updatedVideo.Description)
 }
 
 func TestUpdate_InvalidID(t *testing.T) {
+	ctx := context.Background()
 	videoRepo, err := repository.NewVideoRepository(*dbType, *dsn)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	defer func() {
-		_ = videoRepo.Clean()
+		_ = videoRepo.Clean(ctx)
 	}()
 
 	srv := New(videoRepo)
@@ -140,31 +175,32 @@ func TestUpdate_InvalidID(t *testing.T) {
 	// Try to update with ID = 0
 	video := getVideo()
 	video.ID = 0
-	_, err = srv.Update(video)
+	_, err = srv.Update(ctx, video)
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "ID is required")
 }
 
 func TestDelete(t *testing.T) {
+	ctx := context.Background()
 	videoRepo, err := repository.NewVideoRepository(*dbType, *dsn)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	defer func() {
-		_ = videoRepo.Clean()
+		_ = videoRepo.Clean(ctx)
 	}()
 
 	srv := New(videoRepo)
 
 	// Save a video first
 	video := getVideo()
-	savedVideo, err := srv.Save(video)
+	savedVideo, err := srv.Save(ctx, video)
 	assert.NoError(t, err)
 
 	// Delete the video
-	err = srv.Delete(savedVideo.ID)
+	err = srv.Delete(ctx, savedVideo.ID)
 	assert.NoError(t, err)
 
 	// Verify it's deleted
-	videos, err := srv.FindAll()
+	videos, err := srv.FindAll(ctx)
 	assert.NoError(t, err)
 	assert.Empty(t, videos)
 }
