@@ -42,7 +42,7 @@ func NewVideoRepository(dsn string) (port.VideoRepository, error) {
 		);
 	`)
 	if err != nil {
-		conn.Close(context.Background())
+		_ = conn.Close(context.Background())
 		return nil, fmt.Errorf("failed to create schema: %w", err)
 	}
 

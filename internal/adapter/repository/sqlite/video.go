@@ -215,7 +215,7 @@ func (db *database) FindAll(ctx context.Context) ([]entity.Video, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to query videos: %w", err)
 	}
-	defer rows.Close()
+	defer func() { _ = rows.Close() }()
 
 	var videos []entity.Video
 	for rows.Next() {

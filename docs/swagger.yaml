@@ -24,12 +24,12 @@ definitions:
       author:
         $ref: '#/definitions/entity.Person'
       description:
-        maxLength: 25
+        maxLength: 500
         type: string
       id:
         type: integer
       title:
-        maxLength: 10
+        maxLength: 100
         minLength: 3
         type: string
       url:
@@ -129,6 +129,38 @@ paths:
               type: string
             type: object
       summary: Delete video
+      tags:
+      - Video
+    get:
+      consumes:
+      - application/json
+      description: Find a video by its ID
+      parameters:
+      - description: Video ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Video'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: FindByID video
       tags:
       - Video
     put:

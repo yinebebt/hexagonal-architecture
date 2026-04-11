@@ -20,9 +20,9 @@ in [Hexagonal-architecture](https://medium.com/@yinebeb-tariku/hexagonal-archite
 ### Handler
 
 - [x] REST API - GIN
+- [x] GraphQL (Playground at `/v1/graphql`)
 - [ ] gRPC
 - [ ] WebSocket
-- [ ] GraphQL
 
 ### Repository
 
@@ -44,11 +44,13 @@ hexagonal-architecture/
 │   │   ├── rest/               # REST adapter (driving/inbound)
 │   │   │   ├── handler.go     # Handler implementation & routes
 │   │   │   └── middleware.go  # HTTP middleware
+│   │   ├── graphql/            # GraphQL adapter (driving/inbound)
+│   │   │   └── handler.go     # Schema, resolvers & handler
 │   │   └── templates/          # HTML templates
 │   └── core/                   # Business logic (hexagon)
 │       ├── entity/             # Domain entities
 │       ├── port/                # Ports (interfaces)
-│       │   ├── handler.go      # port.VideoHandler interface
+│       │   ├── service.go      # port.VideoService interface
 │       │   └── repository.go   # port.VideoRepository interface
 │       └── service/            # Business services
 ├── go.mod
