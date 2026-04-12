@@ -12,8 +12,8 @@ type Person struct {
 
 type Video struct {
 	ID          int64     `json:"id"`
-	Title       string    `json:"title" binding:"min=3,max=10" validate:"is-cool"`
-	Description string    `json:"description" binding:"max=25"`
+	Title       string    `json:"title" binding:"min=3,max=100"`
+	Description string    `json:"description" binding:"max=500"`
 	URL         string    `json:"url" binding:"required,url" example:"https://google.com/xyz-video"`
 	Director    Person    `json:"author" binding:"required"`
 	PersonID    uint64    `json:"-"`

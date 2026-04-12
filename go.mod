@@ -1,9 +1,11 @@
 module github.com/yinebebt/hexagonal-architecture
 
-go 1.21
+go 1.26
 
 require (
 	github.com/gin-gonic/gin v1.9.1
+	github.com/graphql-go/graphql v0.8.1
+	github.com/graphql-go/handler v0.2.4
 	github.com/mattn/go-sqlite3 v1.14.22
 	github.com/swaggo/files v1.0.1
 	github.com/swaggo/gin-swagger v1.6.0

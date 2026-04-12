@@ -2,6 +2,7 @@
 package sqlite
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"time"
@@ -54,8 +55,8 @@ func (db *database) createTables() error {
 	createVideosTable := `
 		CREATE TABLE IF NOT EXISTS videos (
 			id INTEGER PRIMARY KEY AUTOINCREMENT,
-			title VARCHAR(10) NOT NULL,
-			description VARCHAR(25),
+			title VARCHAR(100) NOT NULL,
+			description VARCHAR(500),
 			url VARCHAR(256) NOT NULL UNIQUE,
 			person_id INTEGER,
 			created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -71,14 +72,14 @@ func (db *database) createTables() error {
 	return nil
 }
 
-func (db *database) Save(video *entity.Video) error {
+func (db *database) Save(ctx context.Context, video *entity.Video) error {
 	// First, save the Director (Person) if it exists and doesn't have an ID
 	if video.Director.ID == 0 && (video.Director.FirstName != "" || video.Director.LastName != "") {
 		personQuery := `
 			INSERT INTO people (first_name, last_name, age, email)
 			VALUES (?, ?, ?, ?)
 		`
-		result, err := db.db.Exec(personQuery, video.Director.FirstName, video.Director.LastName, video.Director.Age, video.Director.Email)
+		result, err := db.db.ExecContext(ctx, personQuery, video.Director.FirstName, video.Director.LastName, video.Director.Age, video.Director.Email)
 		if err != nil {
 			return fmt.Errorf("failed to save person: %w", err)
 		}
@@ -98,7 +99,7 @@ func (db *database) Save(video *entity.Video) error {
 	`
 
 	now := time.Now()
-	result, err := db.db.Exec(query, video.Title, video.Description, video.URL, video.PersonID, now, now)
+	result, err := db.db.ExecContext(ctx, query, video.Title, video.Description, video.URL, video.PersonID, now, now)
 	if err != nil {
 		return fmt.Errorf("failed to save video: %w", err)
 	}
@@ -115,15 +116,15 @@ func (db *database) Save(video *entity.Video) error {
 	return nil
 }
 
-func (db *database) Update(video *entity.Video) error {
+func (db *database) Update(ctx context.Context, video *entity.Video) error {
 	// Update the Director (Person) if it exists
 	if video.PersonID > 0 && (video.Director.FirstName != "" || video.Director.LastName != "") {
 		personQuery := `
-			UPDATE people 
+			UPDATE people
 			SET first_name = ?, last_name = ?, age = ?, email = ?
 			WHERE id = ?
 		`
-		_, err := db.db.Exec(personQuery, video.Director.FirstName, video.Director.LastName, video.Director.Age, video.Director.Email, video.PersonID)
+		_, err := db.db.ExecContext(ctx, personQuery, video.Director.FirstName, video.Director.LastName, video.Director.Age, video.Director.Email, video.PersonID)
 		if err != nil {
 			return fmt.Errorf("failed to update person: %w", err)
 		}
@@ -131,13 +132,13 @@ func (db *database) Update(video *entity.Video) error {
 
 	// Update the video
 	query := `
-		UPDATE videos 
+		UPDATE videos
 		SET title = ?, description = ?, url = ?, person_id = ?, updated_at = ?
 		WHERE id = ?
 	`
 
 	now := time.Now()
-	result, err := db.db.Exec(query, video.Title, video.Description, video.URL, video.PersonID, now, video.ID)
+	result, err := db.db.ExecContext(ctx, query, video.Title, video.Description, video.URL, video.PersonID, now, video.ID)
 	if err != nil {
 		return fmt.Errorf("failed to update video: %w", err)
 	}
@@ -156,20 +157,65 @@ func (db *database) Update(video *entity.Video) error {
 	return nil
 }
 
-func (db *database) FindAll() ([]entity.Video, error) {
+func (db *database) FindByID(ctx context.Context, id int64) (entity.Video, error) {
 	query := `
-		SELECT v.id, v.title, v.description, v.url, v.person_id, v.created_at, v.updated_at,
+		SELECT v.id, v.title, v.description, v.url, COALESCE(v.person_id, 0), v.created_at, v.updated_at,
+		       p.id, p.first_name, p.last_name, p.age, p.email
+		FROM videos v
+		LEFT JOIN people p ON v.person_id = p.id
+		WHERE v.id = ?
+	`
+
+	var video entity.Video
+	var personID sql.NullInt64
+	var firstName, lastName, email sql.NullString
+	var age sql.NullInt64
+
+	err := db.db.QueryRowContext(ctx, query, id).Scan(
+		&video.ID, &video.Title, &video.Description, &video.URL,
+		&video.PersonID, &video.CreatedAt, &video.UpdatedAt,
+		&personID, &firstName, &lastName, &age, &email,
+	)
+	if err == sql.ErrNoRows {
+		return entity.Video{}, fmt.Errorf("video with id %d not found", id)
+	}
+	if err != nil {
+		return entity.Video{}, fmt.Errorf("failed to query video: %w", err)
+	}
+
+	if personID.Valid {
+		video.Director.ID = uint64(personID.Int64)
+		if firstName.Valid {
+			video.Director.FirstName = firstName.String
+		}
+		if lastName.Valid {
+			video.Director.LastName = lastName.String
+		}
+		if age.Valid {
+			video.Director.Age = int8(age.Int64)
+		}
+		if email.Valid {
+			video.Director.Email = email.String
+		}
+	}
+
+	return video, nil
+}
+
+func (db *database) FindAll(ctx context.Context) ([]entity.Video, error) {
+	query := `
+		SELECT v.id, v.title, v.description, v.url, COALESCE(v.person_id, 0), v.created_at, v.updated_at,
 		       p.id, p.first_name, p.last_name, p.age, p.email
 		FROM videos v
 		LEFT JOIN people p ON v.person_id = p.id
 		ORDER BY v.id
 	`
 
-	rows, err := db.db.Query(query)
+	rows, err := db.db.QueryContext(ctx, query)
 	if err != nil {
 		return nil, fmt.Errorf("failed to query videos: %w", err)
 	}
-	defer rows.Close()
+	defer func() { _ = rows.Close() }()
 
 	var videos []entity.Video
 	for rows.Next() {
@@ -214,10 +260,10 @@ func (db *database) FindAll() ([]entity.Video, error) {
 	return videos, nil
 }
 
-func (db *database) Delete(id int64) error {
+func (db *database) Delete(ctx context.Context, id int64) error {
 	query := `DELETE FROM videos WHERE id = ?`
 
-	result, err := db.db.Exec(query, id)
+	result, err := db.db.ExecContext(ctx, query, id)
 	if err != nil {
 		return fmt.Errorf("failed to delete video: %w", err)
 	}
@@ -234,12 +280,12 @@ func (db *database) Delete(id int64) error {
 	return nil
 }
 
-func (db *database) Clean() error {
-	if _, err := db.db.Exec("DROP TABLE IF EXISTS videos"); err != nil {
+func (db *database) Clean(ctx context.Context) error {
+	if _, err := db.db.ExecContext(ctx, "DROP TABLE IF EXISTS videos"); err != nil {
 		return fmt.Errorf("failed to drop videos table: %w", err)
 	}
 
-	if _, err := db.db.Exec("DROP TABLE IF EXISTS people"); err != nil {
+	if _, err := db.db.ExecContext(ctx, "DROP TABLE IF EXISTS people"); err != nil {
 		return fmt.Errorf("failed to drop people table: %w", err)
 	}
 

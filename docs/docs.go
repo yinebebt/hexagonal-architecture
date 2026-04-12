@@ -102,6 +102,54 @@ const docTemplate = `{
             }
         },
         "/videos/:id": {
+            "get": {
+                "description": "Find a video by its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Video"
+                ],
+                "summary": "FindByID video",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Video ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entity.Video"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
             "put": {
                 "description": "Update video description",
                 "consumes": [
@@ -234,14 +282,14 @@ const docTemplate = `{
                 },
                 "description": {
                     "type": "string",
-                    "maxLength": 25
+                    "maxLength": 500
                 },
                 "id": {
                     "type": "integer"
                 },
                 "title": {
                     "type": "string",
-                    "maxLength": 10,
+                    "maxLength": 100,
                     "minLength": 3
                 },
                 "url": {

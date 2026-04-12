@@ -3,20 +3,20 @@ package rest
 import (
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/yinebebt/hexagonal-architecture/internal/core/entity"
 	"github.com/yinebebt/hexagonal-architecture/internal/core/port"
-	"github.com/yinebebt/hexagonal-architecture/internal/core/service"
 )
 
-// videoHandler implements port.VideoHandler for REST API
+// videoHandler implements REST API for video operations
 type videoHandler struct {
-	videoService service.VideoService
+	videoService port.VideoService
 }
 
-// NewVideoHandler creates a new REST video handler that implements port.VideoHandler
-func NewVideoHandler(videoService service.VideoService) port.VideoHandler {
+// NewVideoHandler creates a new REST video handler
+func NewVideoHandler(videoService port.VideoService) *videoHandler {
 	return &videoHandler{
 		videoService: videoService,
 	}
@@ -34,20 +34,19 @@ func NewVideoHandler(videoService service.VideoService) port.VideoHandler {
 //	@Failure		400	{object}	map[string]string
 //	@Failure		500	{object}	map[string]string
 //	@Router			/videos [post]
-func (v *videoHandler) Save(ctx interface{}) {
-	ginCtx := castContext(ctx)
+func (v *videoHandler) Save(c *gin.Context) {
 	req := entity.Video{}
-	if err := ginCtx.ShouldBindJSON(&req); err != nil {
-		ginCtx.JSON(http.StatusBadRequest, gin.H{"error": "invalid input: " + err.Error()})
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid input: " + err.Error()})
 		return
 	}
 
-	vid, err := v.videoService.Save(req)
+	vid, err := v.videoService.Save(c.Request.Context(), req)
 	if err != nil {
-		ginCtx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	ginCtx.JSON(http.StatusOK, gin.H{"data": vid})
+	c.JSON(http.StatusOK, gin.H{"data": vid})
 }
 
 // FindAll handles GET /videos - returns all videos
@@ -60,14 +59,44 @@ func (v *videoHandler) Save(ctx interface{}) {
 //	@Success		200	{object}	entity.Video
 //	@Failure		500	{object}	map[string]string
 //	@Router			/videos [get]
-func (v *videoHandler) FindAll(ctx interface{}) {
-	ginCtx := castContext(ctx)
-	res, err := v.videoService.FindAll()
+func (v *videoHandler) FindAll(c *gin.Context) {
+	res, err := v.videoService.FindAll(c.Request.Context())
 	if err != nil {
-		ginCtx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	ginCtx.JSON(http.StatusOK, res)
+	c.JSON(http.StatusOK, res)
+}
+
+// FindByID handles GET /videos/:id - returns a single video
+//
+//	@Summary		FindByID video
+//	@Description	Find a video by its ID
+//	@Tags			Video
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"Video ID"
+//	@Success		200	{object}	entity.Video
+//	@Failure		400	{object}	map[string]string
+//	@Failure		404	{object}	map[string]string
+//	@Router			/videos/:id [get]
+func (v *videoHandler) FindByID(c *gin.Context) {
+	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid video ID"})
+		return
+	}
+
+	video, err := v.videoService.FindByID(c.Request.Context(), id)
+	if err != nil {
+		if strings.Contains(err.Error(), "not found") {
+			c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"data": video})
 }
 
 // Delete handles DELETE /videos/:id - deletes a video
@@ -81,20 +110,19 @@ func (v *videoHandler) FindAll(ctx interface{}) {
 //	@Failure		400	{object}	map[string]string
 //	@Failure		500	{object}	map[string]string
 //	@Router			/videos/:id [delete]
-func (v *videoHandler) Delete(ctx interface{}) {
-	ginCtx := castContext(ctx)
-	id, err := strconv.ParseInt(ginCtx.Param("id"), 10, 64)
+func (v *videoHandler) Delete(c *gin.Context) {
+	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
-		ginCtx.JSON(http.StatusBadRequest, gin.H{"error": "invalid video ID"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid video ID"})
 		return
 	}
 
-	err = v.videoService.Delete(id)
+	err = v.videoService.Delete(c.Request.Context(), id)
 	if err != nil {
-		ginCtx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	ginCtx.JSON(http.StatusOK, gin.H{"message": "video deleted successfully"})
+	c.JSON(http.StatusOK, gin.H{"message": "video deleted successfully"})
 }
 
 // Update handles PUT /videos/:id - updates a video
@@ -109,95 +137,33 @@ func (v *videoHandler) Delete(ctx interface{}) {
 //	@Failure		400	{object}	map[string]string
 //	@Failure		500	{object}	map[string]string
 //	@Router			/videos/:id [put]
-func (v *videoHandler) Update(ctx interface{}) {
-	ginCtx := castContext(ctx)
+func (v *videoHandler) Update(c *gin.Context) {
 	var video entity.Video
-	err := ginCtx.ShouldBindJSON(&video)
+	err := c.ShouldBindJSON(&video)
 	if err != nil {
-		ginCtx.JSON(http.StatusBadRequest, gin.H{"error": "invalid input: " + err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid input: " + err.Error()})
 		return
 	}
 
-	id, err := strconv.ParseInt(ginCtx.Param("id"), 10, 64)
+	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
-		ginCtx.JSON(http.StatusBadRequest, gin.H{"error": "invalid video ID"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid video ID"})
 		return
 	}
 	video.ID = id
-	res, err := v.videoService.Update(video)
+	res, err := v.videoService.Update(c.Request.Context(), video)
 	if err != nil {
-		ginCtx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	ginCtx.JSON(http.StatusOK, gin.H{"data": res})
-}
-
-// castContext returns *gin.Context from an interface.
-// It panics if the context cannot be cast, as this indicates a programming error.
-func castContext(ctx interface{}) *gin.Context {
-	c, ok := ctx.(*gin.Context)
-	if !ok {
-		panic("unable to assert interface as *gin.Context")
-	}
-	return c
-}
-
-// Route represents a single HTTP route definition
-type Route struct {
-	Method  string
-	Path    string
-	Handler gin.HandlerFunc
-}
-
-// RegisterRoutes registers multiple routes to a Gin router group
-func RegisterRoutes(group *gin.RouterGroup, routes []Route) {
-	for _, route := range routes {
-		group.Handle(route.Method, route.Path, route.Handler)
-	}
+	c.JSON(http.StatusOK, gin.H{"data": res})
 }
 
 // RegisterVideoRoutes registers video-related REST routes
-func RegisterVideoRoutes(grp *gin.RouterGroup, handler port.VideoHandler) {
-	routes := []Route{
-		{
-			Method:  http.MethodPost,
-			Path:    "/videos",
-			Handler: handlerToGinFunc(handler, "save"),
-		},
-		{
-			Method:  http.MethodGet,
-			Path:    "/videos",
-			Handler: handlerToGinFunc(handler, "find_all"),
-		},
-		{
-			Method:  http.MethodPut,
-			Path:    "/videos/:id",
-			Handler: handlerToGinFunc(handler, "update"),
-		},
-		{
-			Method:  http.MethodDelete,
-			Path:    "/videos/:id",
-			Handler: handlerToGinFunc(handler, "delete"),
-		},
-	}
-
-	RegisterRoutes(grp, routes)
-}
-
-// handlerToGinFunc converts port.VideoHandler to gin.HandlerFunc
-func handlerToGinFunc(handler port.VideoHandler, action string) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		switch action {
-		case "save":
-			handler.Save(c)
-		case "find_all":
-			handler.FindAll(c)
-		case "update":
-			handler.Update(c)
-		case "delete":
-			handler.Delete(c)
-		default:
-			c.JSON(http.StatusBadRequest, gin.H{"message": "invalid action"})
-		}
-	}
+func RegisterVideoRoutes(grp *gin.RouterGroup, handler *videoHandler) {
+	grp.POST("/videos", handler.Save)
+	grp.GET("/videos", handler.FindAll)
+	grp.GET("/videos/:id", handler.FindByID)
+	grp.PUT("/videos/:id", handler.Update)
+	grp.DELETE("/videos/:id", handler.Delete)
 }
