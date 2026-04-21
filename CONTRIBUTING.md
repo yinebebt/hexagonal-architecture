@@ -29,4 +29,4 @@ To contribute to this project, follow these steps:
 
 ### Documentation
 
-- Update the documentation and readme to reflect any changes or additions.
+- Update the documentation and README to reflect any changes or additions.

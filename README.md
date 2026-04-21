@@ -1,4 +1,4 @@
-# Hexagonal-architecture
+# Hexagonal Architecture
 
 ![build-workflow](https://github.com/yinebebt/hexagonal-architecture/actions/workflows/build-and-test.yml/badge.svg)
 
@@ -13,21 +13,21 @@ In this demo, the core business functionality revolves around managing user and 
 Administrators have the capability to manage videos, while users are provided with access to view the available videos.
 
 Explore the concept of Hexagonal Architecture further
-in [Hexagonal-architecture](https://medium.com/@yinebeb-tariku/hexagonal-architecture-93a946776242).
+in [Hexagonal Architecture in Go](https://yinebebt.com/post/hexagonal-architecture/).
 
 ## Adapters
 
 ### Handler
 
-- [x] REST API - GIN
+- [x] REST API - Gin
 - [x] GraphQL (Playground at `/v1/graphql`)
 - [ ] gRPC
 - [ ] WebSocket
 
 ### Repository
 
-- [x] Sqlite
-- [x] Postgres
+- [x] SQLite
+- [x] PostgreSQL
 
 ## Project Structure
 
@@ -79,7 +79,7 @@ go mod download
 go build ./cmd/main.go
 
 # Run tests
-go test ./...
+go test -v -race ./...
 ```
 
 ## Running the Application
@@ -93,12 +93,4 @@ go run ./cmd/main.go -dbtype=postgres -dsn="postgres://user:password@localhost/d
 
 # Set custom port
 PORT=8080 go run ./cmd/main.go
-```
-
-## Testing
-
-Run all tests:
-
-```bash
-go test -v -race ./...
 ```

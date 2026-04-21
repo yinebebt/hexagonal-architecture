@@ -11,7 +11,7 @@ const docTemplate = `{
         "title": "{{.Title}}",
         "contact": {
             "name": "Yinebe T.",
-            "url": "www.linkedin.com/in/yinebeb-tariku",
+            "url": "https://yinebebt.com",
             "email": "yintar5@gmail.com"
         },
         "version": "{{.Version}}"
