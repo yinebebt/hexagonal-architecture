@@ -12,9 +12,6 @@ can build scalable and maintainable systems with ease.
 In this demo, the core business functionality revolves around managing user and video entities.
 Administrators have the capability to manage videos, while users are provided with access to view the available videos.
 
-Explore the concept of Hexagonal Architecture further
-in [Hexagonal Architecture in Go](https://yinebebt.com/post/hexagonal-architecture/).
-
 ## Adapters
 
 ### Handler
