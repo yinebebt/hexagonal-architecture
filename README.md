@@ -9,8 +9,8 @@ The goal of this project is to provide a straightforward example that developers
 Hexagonal Architecture in their own projects. By following the structure and patterns demonstrated here, developers
 can build scalable and maintainable systems with ease.
 
-In this demo, the core business functionality revolves around managing user and video entities.
-Administrators have the capability to manage videos, while users are provided with access to view the available videos.
+In this demo, the core is a small video catalog: create, update, delete, and list videos. The same service is
+exposed over REST and GraphQL and stored in SQLite or PostgreSQL.
 
 ## Adapters
 
